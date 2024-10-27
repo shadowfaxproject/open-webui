@@ -135,6 +135,8 @@ from open_webui.utils.utils import (
     get_verified_user,
 )
 
+from commons.ChatState import ChatState
+
 if SAFE_MODE:
     print("SAFE MODE ENABLED")
     Functions.deactivate_all_functions()
@@ -1521,6 +1523,18 @@ async def update_task_config(form_data: TaskConfigForm, user=Depends(get_admin_u
 
 @app.post("/api/task/title/completions")
 async def generate_title(form_data: dict, user=Depends(get_verified_user)):
+    # Check if gift_request is ready for title generation
+    chat_state = ChatState.load(form_data["chat_id"])
+    if not chat_state.gift_request:
+        # gift_request not ready. Do not generate title
+        return
+    elif chat_state.title_generated:
+        # Title already generated. return the existing title
+        return chat_state.chat_title
+    elif not chat_state.gift_request.has_title_fields():
+        # gift_request does not have minimal info. Do not generate title
+        return
+
     print("generate_title")
 
     model_id = form_data["model"]
@@ -1535,28 +1549,28 @@ async def generate_title(form_data: dict, user=Depends(get_verified_user)):
     task_model_id = get_task_model_id(model_id)
     print(task_model_id)
 
-    model = app.state.MODELS[task_model_id]
+    gift_request_desc = chat_state.gift_request.describe()
+    print(gift_request_desc)
 
     if app.state.config.TITLE_GENERATION_PROMPT_TEMPLATE != "":
         template = app.state.config.TITLE_GENERATION_PROMPT_TEMPLATE
     else:
-        template = """Create a concise, 3-5 word title with an emoji as a title for the chat history, in the given language. Suitable Emojis for the summary can be used to enhance understanding but avoid quotation marks or special formatting. RESPOND ONLY WITH THE TITLE TEXT.
+        template = """Create a concise, 3-5 word title for the prompt in the given language for 
+                gift-giving-situation. Avoid quotation marks or special formatting. RESPOND ONLY WITH THE TITLE TEXT.
 
-Examples of titles:
-📉 Stock Market Trends
-🍪 Perfect Chocolate Chip Recipe
-Evolution of Music Streaming
-Remote Work Productivity Tips
-Artificial Intelligence in Healthcare
-🎮 Video Game Development Insights
+                Examples of titles:
+                Annie's Birthday
+                Housewarming at the Smiths
+                Graduation Sarah
+                Friend's Wedding
 
-<chat_history>
-{{MESSAGES:END:2}}
-</chat_history>"""
+                <gift-giving-situation>
+                {{MESSAGES}}
+                </gift-giving-situation>"""
 
     content = title_generation_template(
         template,
-        form_data["messages"],
+        gift_request_desc,
         {
             "name": user.name,
             "location": user.info.get("location") if user.info else None,
@@ -1596,7 +1610,9 @@ Artificial Intelligence in Healthcare
     if "chat_id" in payload:
         del payload["chat_id"]
 
-    return await generate_chat_completions(form_data=payload, user=user)
+    chat_title = await generate_chat_completions(form_data=payload, user=user)
+    ChatState.update(form_data["chat_id"], title_generated=True, chat_title=chat_title)
+    return chat_title
 
 
 @app.post("/api/task/tags/completions")

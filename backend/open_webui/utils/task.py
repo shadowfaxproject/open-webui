@@ -111,11 +111,9 @@ def replace_messages_variable(template: str, messages: list[str]) -> str:
 
 
 def title_generation_template(
-    template: str, messages: list[dict], user: Optional[dict] = None
+    template: str, gift_situation: str, user: Optional[dict] = None
 ) -> str:
-    prompt = get_last_user_message(messages)
-    template = replace_prompt_variable(template, prompt)
-    template = replace_messages_variable(template, messages)
+    template = replace_prompt_variable(template, gift_situation)
 
     template = prompt_template(
         template,
@@ -125,7 +123,6 @@ def title_generation_template(
             else {}
         ),
     )
-
     return template
 
 
