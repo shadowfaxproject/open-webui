@@ -1617,6 +1617,7 @@ async def generate_title(form_data: dict, user=Depends(get_verified_user)):
 
 @app.post("/api/task/tags/completions")
 async def generate_chat_tags(form_data: dict, user=Depends(get_verified_user)):
+    return None
     print("generate_chat_tags")
     model_id = form_data["model"]
     if model_id not in app.state.MODELS:
