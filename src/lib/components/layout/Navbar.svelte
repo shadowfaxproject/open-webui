@@ -25,6 +25,7 @@
 	import AdjustmentsHorizontal from '../icons/AdjustmentsHorizontal.svelte';
 	import Map from '../icons/Map.svelte';
 	import { stringify } from 'postcss';
+	import {WEBUI_BASE_URL} from "$lib/constants";
 
 	const i18n = getContext('i18n');
 
@@ -63,7 +64,12 @@
 					aria-label="Toggle Sidebar"
 				>
 					<div class=" m-auto self-center">
-						<MenuLines />
+						<img
+							crossorigin="anonymous"
+							src="{WEBUI_BASE_URL}/static/open_arrow.png"
+							class=" size-6 -translate-x-2 rounded-full"
+							alt="logo"
+						/>
 					</div>
 				</button>
 			</div>
