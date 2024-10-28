@@ -1730,7 +1730,7 @@
 		}
 
 		const messages = createMessagesList(responseMessageId);
-		if (messages.length == 2 && selectedModels[0] === model.id) {
+		if (messages.length >= 2 && selectedModels[0] === model.id) {
 			window.history.replaceState(history.state, '', `/c/${_chatId}`);
 
 			const title = await generateChatTitle(messages);
