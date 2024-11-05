@@ -54,5 +54,8 @@ if [ -n "$SPACE_ID" ]; then
   export WEBUI_URL=${SPACE_HOST}
 fi
 
-# WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*'
-WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' --ssl-certfile='/etc/nginx/ssl/magicboxgifts.com.crt' --ssl-keyfile='/etc/nginx/ssl/magicboxgifts.com.key'
+if [[ "$WEBUI_SSL" == "true" ]]; then
+  WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' --ssl-certfile="$WEBUI_SSL_CERT_PATH" --ssl-keyfile="$WEBUI_SSL_KEY_PATH"
+else
+  WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*'
+fi
