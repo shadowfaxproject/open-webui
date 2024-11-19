@@ -54,7 +54,7 @@ if [ -n "$SPACE_ID" ]; then
   export WEBUI_URL=${SPACE_HOST}
 fi
 
-ENV_FILE="SCRIPT_DIR/../.env"
+ENV_FILE="$SCRIPT_DIR/../.env"
 # Read the .env file and set the environment variables
 while IFS='=' read -r key value
 do
