@@ -61,18 +61,11 @@ do
   if [ "$key" == "WEBUI_SSL" ]; then
     export WEBUI_SSL=$value
   fi
-  if [ "$key" == "WEBUI_SSL_CERT_PATH" ]; then
-    export WEBUI_SSL_CERT_PATH=$value
-  fi
-  if [ "$key" == "WEBUI_SSL_KEY_PATH" ]; then
-    export WEBUI_SSL_KEY_PATH=$value
-  fi
 done < "$ENV_FILE"
 
 if [[ "${WEBUI_SSL}" == "true" ]]; then
   echo "Starting Open WebUI with SSL"
-  echo "exec uvicorn open_webui.main:app --host $HOST --port $PORT --forwarded-allow-ips '*' --ssl-certfile=$WEBUI_SSL_CERT_PATH --ssl-keyfile=$WEBUI_SSL_KEY_PATH"
-  WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' --ssl-certfile="$WEBUI_SSL_CERT_PATH" --ssl-keyfile="$WEBUI_SSL_KEY_PATH"
+  WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' --ssl-certfile='/etc/nginx/ssl/magicboxgifts.com.crt' --ssl-keyfile='/etc/nginx/ssl/magicboxgifts.com.key'
 else
   echo "Starting Open WebUI without SSL"
   WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*'
