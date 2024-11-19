@@ -61,6 +61,12 @@ do
   if [ "$key" == "WEBUI_SSL" ]; then
     export WEBUI_SSL=$value
   fi
+  if [ "$key" == "WEBUI_SSL_CERT_PATH" ]; then
+    export WEBUI_SSL_CERT_PATH=$value
+  fi
+  if [ "$key" == "WEBUI_SSL_KEY_PATH" ]; then
+    export WEBUI_SSL_KEY_PATH=$value
+  fi
 done < "$ENV_FILE"
 
 if [[ "${WEBUI_SSL}" == "true" ]]; then
