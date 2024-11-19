@@ -54,7 +54,16 @@ if [ -n "$SPACE_ID" ]; then
   export WEBUI_URL=${SPACE_HOST}
 fi
 
-if [[ "$WEBUI_SSL" == "true" ]]; then
+ENV_FILE="SCRIPT_DIR/../.env"
+# Read the .env file and set the environment variables
+while IFS='=' read -r key value
+do
+  if [ "$key" == "WEBUI_SSL" ]; then
+    export WEBUI_SSL=$value
+  fi
+done < "$ENV_FILE"
+
+if [[ "${WEBUI_SSL}" == "true" ]]; then
   echo "Starting Open WebUI with SSL"
   WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec uvicorn open_webui.main:app --host "$HOST" --port "$PORT" --forwarded-allow-ips '*' --ssl-certfile="$WEBUI_SSL_CERT_PATH" --ssl-keyfile="$WEBUI_SSL_KEY_PATH"
 else
