@@ -69,15 +69,6 @@
 									: $i18n.t('(latest)')}
 						</a>
 					</div>
-
-					<button
-						class=" underline flex items-center space-x-1 text-xs text-gray-500 dark:text-gray-500"
-						on:click={() => {
-							showChangelog.set(true);
-						}}
-					>
-						<div>{$i18n.t("See what's new")}</div>
-					</button>
 				</div>
 
 				<button

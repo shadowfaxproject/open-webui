@@ -25,6 +25,7 @@
 	import AdjustmentsHorizontal from '../icons/AdjustmentsHorizontal.svelte';
 	import Map from '../icons/Map.svelte';
 	import { stringify } from 'postcss';
+	import {WEBUI_BASE_URL} from "$lib/constants";
 	import PencilSquare from '../icons/PencilSquare.svelte';
 	import Plus from '../icons/Plus.svelte';
 
@@ -65,7 +66,12 @@
 					aria-label="Toggle Sidebar"
 				>
 					<div class=" m-auto self-center">
-						<MenuLines />
+						<img
+							crossorigin="anonymous"
+							src="{WEBUI_BASE_URL}/static/open_arrow.png"
+							class=" size-6 -translate-x-2 rounded-full"
+							alt="logo"
+						/>
 					</div>
 				</button>
 			</div>
@@ -131,23 +137,7 @@
 					</Tooltip>
 				{/if}
 
-				{#if !$mobile}
-					<Tooltip content={$i18n.t('Controls')}>
-						<button
-							class=" flex cursor-pointer px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
-							on:click={async () => {
-								await showControls.set(!$showControls);
-							}}
-							aria-label="Controls"
-						>
-							<div class=" m-auto self-center">
-								<AdjustmentsHorizontal className=" size-5" strokeWidth="0.5" />
-							</div>
-						</button>
-					</Tooltip>
-				{/if}
-
-				<Tooltip content={$i18n.t('New Chat')}>
+				<Tooltip content={$i18n.t('New Gift Chat')}>
 					<button
 						id="new-chat-button"
 						class=" flex {$showSidebar

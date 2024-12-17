@@ -1772,7 +1772,7 @@
 		}
 
 		const messages = createMessagesList(responseMessageId);
-		if (messages.length == 2 && selectedModels[0] === model.id) {
+		if (messages.length >= 2 && selectedModels[0] === model.id) {
 			window.history.replaceState(history.state, '', `/c/${_chatId}`);
 
 			const title = await generateChatTitle(messages);
@@ -2318,11 +2318,11 @@
 								}}
 							/>
 
-							<div
-								class="absolute bottom-1 text-xs text-gray-500 text-center line-clamp-1 right-0 left-0"
-							>
-								<!-- {$i18n.t('LLMs can make mistakes. Verify important information.')} -->
-							</div>
+<!--							<div-->
+<!--								class="absolute bottom-1.5 text-xs text-gray-500 text-center line-clamp-1 right-0 left-0"-->
+<!--							>-->
+<!--								{$i18n.t('LLMs can make mistakes. Verify important information.')}-->
+<!--							</div>-->
 						</div>
 					{:else}
 						<div class="overflow-auto w-full h-full flex items-center">

@@ -17,7 +17,7 @@
 <button
 	class={className}
 	on:click={() => {
-		showImagePreview = true;
+		showImagePreview = false;
 	}}
 >
 	<img src={_src} {alt} class={imageClassName} draggable="false" data-cy="image" />
