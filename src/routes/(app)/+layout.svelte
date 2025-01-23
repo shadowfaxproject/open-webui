@@ -39,9 +39,11 @@
 	} from '$lib/stores';
 
 	import Sidebar from '$lib/components/layout/Sidebar.svelte';
+	import Sidebar1 from '$lib/components/layout/ProductSidebar.svelte';
 	import SettingsModal from '$lib/components/chat/SettingsModal.svelte';
 	import ChangelogModal from '$lib/components/ChangelogModal.svelte';
 	import AccountPending from '$lib/components/layout/Overlay/AccountPending.svelte';
+	import ProductSidebar from "$lib/components/layout/ProductSidebar.svelte";
 
 	const i18n = getContext('i18n');
 
@@ -137,6 +139,13 @@
 					event.preventDefault();
 					console.log('toggleSidebar');
 					document.getElementById('sidebar-toggle-button')?.click();
+				}
+
+				// Check if Ctrl + Shift + S is pressed
+				if (isCtrlPressed && isShiftPressed && event.key.toLowerCase() === 'g') {
+					event.preventDefault();
+					console.log('toggleProductSidebar');
+					document.getElementById('product-sidebar-toggle-button')?.click();
 				}
 
 				// Check if Ctrl + Shift + Backspace is pressed
@@ -280,6 +289,7 @@
 
 			<Sidebar />
 			<slot />
+			<ProductSidebar />
 		{/if}
 	</div>
 </div>

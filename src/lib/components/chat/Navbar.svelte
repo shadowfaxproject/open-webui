@@ -10,6 +10,7 @@
 		showArchivedChats,
 		showControls,
 		showSidebar,
+		showProductSidebar,
 		temporaryChatEnabled,
 		user
 	} from '$lib/stores';
@@ -173,6 +174,39 @@
 					</UserMenu>
 				{/if}
 			</div>
+
+			<div
+				class="{$showProductSidebar
+					? 'md:hidden'
+					: ''} mr-1 self-start flex flex-none items-center text-gray-600 dark:text-gray-400"
+			>
+				<button
+					id="product-sidebar-toggle-button"
+					class="cursor-pointer px-2 py-2 flex rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+					on:click={() => {
+						showProductSidebar.set(!$showProductSidebar);
+					}}
+					aria-label="Toggle Product Sidebar"
+				>
+					<div class=" m-auto self-center">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke="currentColor"
+							stroke-width="2.5"
+							class="size-3.5"
+						>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M15.75 19.5 8.25 12l7.5-7.5"
+						/>
+						</svg>
+					</div>
+				</button>
+			</div>
+
 		</div>
 	</div>
 </nav>
