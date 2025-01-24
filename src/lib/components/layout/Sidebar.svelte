@@ -78,7 +78,7 @@
 
 	const initFolders = async () => {
 		const folderList = await getFolders(localStorage.token).catch((error) => {
-			toast.error(error);
+			toast.error(`${error}`);
 			return [];
 		});
 
@@ -143,7 +143,7 @@
 		};
 
 		const res = await createNewFolder(localStorage.token, name).catch((error) => {
-			toast.error(error);
+			toast.error(`${error}`);
 			return null;
 		});
 
@@ -432,7 +432,7 @@
 			name: name,
 			access_control: access_control
 		}).catch((error) => {
-			toast.error(error);
+			toast.error(`${error}`);
 			return null;
 		});
 
@@ -556,11 +556,15 @@
 					className="px-2 mt-0.5"
 					name={$i18n.t('Channels')}
 					dragAndDrop={false}
-					onAdd={$user.role === 'admin'
-						? () => {
+					onAdd={async () => {
+						if ($user.role === 'admin') {
+							await tick();
+
+							setTimeout(() => {
 								showCreateChannel = true;
-							}
-						: null}
+							}, 0);
+						}
+					}}
 					onAddLabel={$i18n.t('Create Channel')}
 				>
 					{#each $channels as channel}
@@ -601,7 +605,7 @@
 							if (chat.folder_id) {
 								const res = await updateChatFolderIdById(localStorage.token, chat.id, null).catch(
 									(error) => {
-										toast.error(error);
+										toast.error(`${error}`);
 										return null;
 									}
 								);
@@ -620,7 +624,7 @@
 
 						const res = await updateFolderParentIdById(localStorage.token, id, null).catch(
 							(error) => {
-								toast.error(error);
+								toast.error(`${error}`);
 								return null;
 							}
 						);
@@ -666,7 +670,7 @@
 												chat.id,
 												null
 											).catch((error) => {
-												toast.error(error);
+												toast.error(`${error}`);
 												return null;
 											});
 										}
