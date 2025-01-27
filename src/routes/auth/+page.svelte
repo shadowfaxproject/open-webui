@@ -167,7 +167,7 @@
 							<img
 								crossorigin="anonymous"
 								src="{WEBUI_BASE_URL}/static/splash.png"
-								class=" w-32 rounded-full"
+								class=" w-36 rounded-full"
 								alt="logo"
 							/>
 						</div>
@@ -180,15 +180,24 @@
 							}}
 						>
 							<div class="mb-1">
-								<div class=" text-2xl font-medium" style="color: rgb(235, 83, 82)">
+								<div class=" text-2xl font-semibold" style="color: rgb(235, 83, 82)">
 									{#if $config?.onboarding ?? false}
 										{$i18n.t(`Get started with {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
 									{:else if mode === 'ldap'}
-										{$i18n.t(`{{WEBUI_NAME}} - {{WEBUI_TAGLINE}}`, { WEBUI_NAME: $WEBUI_NAME, WEBUI_TAGLINE: $WEBUI_TAGLINE })}
+										{$i18n.t(`{{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
 									{:else if mode === 'signin'}
-										{$i18n.t(`{{WEBUI_NAME}} - {{WEBUI_TAGLINE}}`, { WEBUI_NAME: $WEBUI_NAME, WEBUI_TAGLINE: $WEBUI_TAGLINE })}
+										{$i18n.t(`{{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
 									{:else}
-										{$i18n.t(`{{WEBUI_NAME}} - {{WEBUI_TAGLINE}}`, { WEBUI_NAME: $WEBUI_NAME, WEBUI_TAGLINE: $WEBUI_TAGLINE })}
+										{$i18n.t(`{{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
+									{/if}
+								</div>
+								<div class=" text-base font-normal font-sans" style="color: rgb(235, 83, 82)">
+									{#if mode === 'ldap'}
+										{$i18n.t(`{{WEBUI_TAGLINE}}`, { WEBUI_TAGLINE: $WEBUI_TAGLINE })}
+									{:else if mode === 'signin'}
+										{$i18n.t(`{{WEBUI_TAGLINE}}`, { WEBUI_TAGLINE: $WEBUI_TAGLINE })}
+									{:else}
+										{$i18n.t(`{{WEBUI_TAGLINE}}`, { WEBUI_TAGLINE: $WEBUI_TAGLINE })}
 									{/if}
 								</div>
 
