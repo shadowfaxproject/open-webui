@@ -166,20 +166,12 @@ async def generate_title(
     else:
         template = DEFAULT_TITLE_GENERATION_PROMPT_TEMPLATE
 
-    messages = form_data["messages"]
-
-    # Remove reasoning details from the messages
-    for message in messages:
-        message["content"] = re.sub(
-            r"<details\s+type=\"reasoning\"[^>]*>.*?<\/details>",
-            "",
-            message["content"],
-            flags=re.S,
-        ).strip()
+    gift_request_desc = chat_state.gift_request.describe()
+    print(gift_request_desc)
 
     content = title_generation_template(
         template,
-        messages,
+        gift_request_desc,
         {
             "name": user.name,
             "location": user.info.get("location") if user.info else None,
