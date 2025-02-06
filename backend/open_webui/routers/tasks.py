@@ -32,7 +32,7 @@ from open_webui.config import (
     DEFAULT_MOA_GENERATION_PROMPT_TEMPLATE,
 )
 from open_webui.env import SRC_LOG_LEVELS
-
+from commons.ChatState import ChatState
 
 log = logging.getLogger(__name__)
 log.setLevel(SRC_LOG_LEVELS["MODELS"])
