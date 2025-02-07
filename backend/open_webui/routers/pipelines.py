@@ -77,6 +77,9 @@ def process_pipeline_inlet_filter(request, payload, user, models):
             if key == "":
                 continue
 
+            # Manual Fix: Remove model from metadata to avoid downstream parsing error
+            payload["metadata"].pop("model", None)
+
             headers = {"Authorization": f"Bearer {key}"}
             r = requests.post(
                 f"{url}/{filter['id']}/filter/inlet",
