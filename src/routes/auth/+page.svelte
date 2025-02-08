@@ -8,7 +8,7 @@
 	import { getBackendConfig } from '$lib/apis';
 	import { ldapUserSignIn, getSessionUser, userSignIn, userSignUp } from '$lib/apis/auths';
 
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
+	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
 	import { WEBUI_NAME, WEBUI_TAGLINE, config, user, socket } from '$lib/stores';
 
 	import { generateInitialsImage, canvasPixelTest } from '$lib/utils';
@@ -449,6 +449,22 @@
 						{/if}
 					</div>
 				{/if}
+				<button
+					class="flex justify-center items-center text-xs w-full text-center underline"
+					on:click={() => {
+						window.open(`${WEBUI_HOSTNAME}/terms.html`, '_blank');
+					}}
+				>
+					<span>{$i18n.t('Terms')}</span>
+				</button>
+				<button
+					class="flex justify-center items-center text-xs w-full text-center underline"
+					on:click={() => {
+						window.open(`${WEBUI_HOSTNAME}/privacy.html`, '_blank');
+					}}
+				>
+					<span>{$i18n.t('Privacy')}</span>
+				</button>
 			</div>
 		</div>
 	{/if}
