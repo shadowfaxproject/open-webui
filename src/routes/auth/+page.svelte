@@ -452,7 +452,7 @@
 				<button
 					class="flex justify-center items-center text-xs w-full text-center underline"
 					on:click={() => {
-						window.open(`${WEBUI_HOSTNAME}/terms.html`, '_blank');
+						window.open(`https://magicboxgifts.com/terms.html`, '_blank');
 					}}
 				>
 					<span>{$i18n.t('Terms')}</span>
@@ -460,7 +460,7 @@
 				<button
 					class="flex justify-center items-center text-xs w-full text-center underline"
 					on:click={() => {
-						window.open(`${WEBUI_HOSTNAME}/privacy.html`, '_blank');
+						window.open(`https://magicboxgifts.com/privacy.html`, '_blank');
 					}}
 				>
 					<span>{$i18n.t('Privacy')}</span>
