@@ -449,6 +449,14 @@
 						{/if}
 					</div>
 				{/if}
+				<div class="flex justify-center items-center text-base w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
+					<span>
+						&#8226;{$i18n.t(' Chat with Magicbox about all your gifting needs.')}<br>
+						&#8226;{$i18n.t(' Get creative gift ideas.')}<br>
+						&#8226;{$i18n.t(' Get gift suggestions that will be guaranteed hit.')}<br>
+						&#8226;{$i18n.t(' Gifts from around the web at your fingertips.')}<br>
+					</span>
+				</div>
 				<button
 					class="flex justify-center items-center text-xs w-full text-center underline"
 					on:click={() => {
