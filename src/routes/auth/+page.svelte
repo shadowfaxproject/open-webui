@@ -180,7 +180,7 @@
 							}}
 						>
 							<div class="mb-1">
-								<div class=" text-2xl font-semibold" style="color: rgb(235, 83, 82)">
+								<div class=" text-3xl font-semibold" style="color: rgb(235, 83, 82)">
 									{#if $config?.onboarding ?? false}
 										{$i18n.t(`Get started with {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
 									{:else if mode === 'ldap'}
@@ -191,7 +191,7 @@
 										{$i18n.t(`{{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
 									{/if}
 								</div>
-								<div class=" text-base font-normal font-sans" style="color: rgb(235, 83, 82)">
+								<div class=" text-lg font-medium font-sans" style="color: rgb(235, 83, 82)">
 									{#if mode === 'ldap'}
 										{$i18n.t(`{{WEBUI_TAGLINE}}`, { WEBUI_TAGLINE: $WEBUI_TAGLINE })}
 									{:else if mode === 'signin'}
@@ -452,8 +452,7 @@
 				<div class="flex justify-center items-center text-base w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
 					<span>
 						&#8226;{$i18n.t(' Chat with Magicbox about all your gifting needs.')}<br>
-						&#8226;{$i18n.t(' Get creative gift ideas.')}<br>
-						&#8226;{$i18n.t(' Get gift suggestions that will be guaranteed hit.')}<br>
+						&#8226;{$i18n.t(' Get create ideas & gifts that will be a guaranteed hit.')}<br>
 						&#8226;{$i18n.t(' Gifts from around the web at your fingertips.')}<br>
 					</span>
 				</div>
