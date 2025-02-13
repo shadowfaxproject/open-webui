@@ -449,10 +449,10 @@
 						{/if}
 					</div>
 				{/if}
-				<div class="flex justify-center items-center text-base w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
+				<div class="flex justify-center items-center text-sm w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
 					<span>
 						&#8226;{$i18n.t(' Chat with Magicbox about all your gifting needs.')}<br>
-						&#8226;{$i18n.t(' Get create ideas & gifts that will be a guaranteed hit.')}<br>
+						&#8226;{$i18n.t(' Get creative ideas & gifts that will be a guaranteed hit.')}<br>
 						&#8226;{$i18n.t(' Gifts from around the web at your fingertips.')}<br>
 					</span>
 				</div>
