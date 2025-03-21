@@ -9,7 +9,7 @@
 	import { ldapUserSignIn, getSessionUser, userSignIn, userSignUp } from '$lib/apis/auths';
 
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL } from '$lib/constants';
-	import { WEBUI_NAME, config, user, socket } from '$lib/stores';
+	import { WEBUI_NAME, WEBUI_TAGLINE, config, user, socket } from '$lib/stores';
 
 	import { generateInitialsImage, canvasPixelTest } from '$lib/utils';
 
@@ -157,7 +157,7 @@
 
 <svelte:head>
 	<title>
-		{`${$WEBUI_NAME}`}
+		{`${$WEBUI_NAME} - ${$WEBUI_TAGLINE}`}
 	</title>
 </svelte:head>
 
@@ -175,20 +175,6 @@
 	<div class="w-full absolute top-0 left-0 right-0 h-8 drag-region" />
 
 	{#if loaded}
-		<div class="fixed m-10 z-50">
-			<div class="flex space-x-2">
-				<div class=" self-center">
-					<img
-						id="logo"
-						crossorigin="anonymous"
-						src="{WEBUI_BASE_URL}/static/splash.png"
-						class=" w-6 rounded-full"
-						alt="logo"
-					/>
-				</div>
-			</div>
-		</div>
-
 		<div
 			class="fixed bg-transparent min-h-screen w-full flex justify-center font-primary z-50 text-black dark:text-white"
 		>
@@ -209,6 +195,14 @@
 					</div>
 				{:else}
 					<div class="  my-auto pb-10 w-full dark:text-gray-100">
+						<div class=" flex items-center justify-center pb-10">
+							<img
+								crossorigin="anonymous"
+								src="{WEBUI_BASE_URL}/static/splash.png"
+								class=" w-32 rounded-full"
+								alt="logo"
+							/>
+						</div>
 						<form
 							class=" flex flex-col justify-center"
 							on:submit={(e) => {
@@ -217,15 +211,15 @@
 							}}
 						>
 							<div class="mb-1">
-								<div class=" text-2xl font-medium">
+								<div class=" text-2xl font-medium" style="color: rgb(235, 83, 82)">
 									{#if $config?.onboarding ?? false}
 										{$i18n.t(`Get started with {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
 									{:else if mode === 'ldap'}
-										{$i18n.t(`Sign in to {{WEBUI_NAME}} with LDAP`, { WEBUI_NAME: $WEBUI_NAME })}
+										{$i18n.t(`{{WEBUI_NAME}} - {{WEBUI_TAGLINE}}`, { WEBUI_NAME: $WEBUI_NAME, WEBUI_TAGLINE: $WEBUI_TAGLINE })}
 									{:else if mode === 'signin'}
-										{$i18n.t(`Sign in to {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
+										{$i18n.t(`{{WEBUI_NAME}} - {{WEBUI_TAGLINE}}`, { WEBUI_NAME: $WEBUI_NAME, WEBUI_TAGLINE: $WEBUI_TAGLINE })}
 									{:else}
-										{$i18n.t(`Sign up to {{WEBUI_NAME}}`, { WEBUI_NAME: $WEBUI_NAME })}
+										{$i18n.t(`{{WEBUI_NAME}} - {{WEBUI_TAGLINE}}`, { WEBUI_NAME: $WEBUI_NAME, WEBUI_TAGLINE: $WEBUI_TAGLINE })}
 									{/if}
 								</div>
 
