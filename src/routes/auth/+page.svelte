@@ -8,7 +8,15 @@
 	import { getBackendConfig } from '$lib/apis';
 	import { ldapUserSignIn, getSessionUser, userSignIn, userSignUp } from '$lib/apis/auths';
 
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
+	import {
+		MB_THEME_COLOR_DARK,
+		MB_THEME_COLOR_LIGHT,
+		TRIAL_USER_EMAIL,
+		TRIAL_USER_PASSWORD,
+		WEBUI_API_BASE_URL,
+		WEBUI_BASE_URL,
+		WEBUI_HOSTNAME
+	} from '$lib/constants';
 	import { WEBUI_NAME, WEBUI_TAGLINE, config, user, socket } from '$lib/stores';
 
 	import { generateInitialsImage, canvasPixelTest } from '$lib/utils';
@@ -339,6 +347,21 @@
 													}}
 												>
 													{mode === 'signin' ? $i18n.t('Sign up') : $i18n.t('Sign in')}
+												</button>
+											</div>
+										{/if}
+										{#if $config?.features.enable_signup && !($config?.onboarding ?? false)}
+											<div class=" mt-4 text-sm text-center">
+												<button
+													class="bg-[#EB8486] hover:bg-[#EB5352] text-white/60 hover:text-white transition w-1/2 rounded-full font-medium text-sm py-2.5"
+													on:click={() => {
+														email = TRIAL_USER_EMAIL;
+														password = TRIAL_USER_PASSWORD;
+														mode = 'signin';
+														submitHandler();
+													}}
+												>
+													{$i18n.t('Quick Trial')}
 												</button>
 											</div>
 										{/if}
