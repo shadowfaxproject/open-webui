@@ -350,21 +350,6 @@
 												</button>
 											</div>
 										{/if}
-										{#if $config?.features.enable_signup && !($config?.onboarding ?? false)}
-											<div class=" mt-4 text-sm text-center">
-												<button
-													class="bg-[#EB8486] hover:bg-[#EB5352] text-white/60 hover:text-white transition w-1/2 rounded-full font-medium text-sm py-2.5"
-													on:click={() => {
-														email = TRIAL_USER_EMAIL;
-														password = TRIAL_USER_PASSWORD;
-														mode = 'signin';
-														submitHandler();
-													}}
-												>
-													{$i18n.t('Quick Trial')}
-												</button>
-											</div>
-										{/if}
 									{/if}
 								{/if}
 							</div>
@@ -480,6 +465,21 @@
 								{/if}
 							</div>
 						{/if}
+
+						<hr class="w-full h-px my-4 border-0 dark:bg-gray-100/10 bg-gray-700/10" />
+						<div class=" mt-4 text-sm text-center">
+							<button
+								class="bg-[#EB8486] hover:bg-[#EB5352] text-white/60 hover:text-white transition w-1/2 rounded-full font-medium text-sm py-2.5"
+								on:click={() => {
+									email = TRIAL_USER_EMAIL;
+									password = TRIAL_USER_PASSWORD;
+									mode = 'signin';
+									submitHandler();
+								}}
+							>
+								{$i18n.t('Quick Trial')}
+							</button>
+						</div>
 
 						{#if $config?.features.enable_ldap && $config?.features.enable_login_form}
 							<div class="mt-2">
