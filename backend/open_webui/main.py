@@ -8,6 +8,7 @@ import shutil
 import sys
 import time
 import random
+import re
 
 from contextlib import asynccontextmanager
 from urllib.parse import urlencode, parse_qs, urlparse
@@ -1077,6 +1078,8 @@ async def chat_completed(
     request: Request, form_data: dict, user=Depends(get_verified_user)
 ):
     try:
+        # Capture latest assistant-message here and manipulate it as needed.
+        magicbox_post_process(form_data, user)
         model_item = form_data.pop("model_item", {})
 
         if model_item.get("direct", False):
@@ -1090,6 +1093,43 @@ async def chat_completed(
             detail=str(e),
         )
 
+def magicbox_post_process(response: dict, user=Depends(get_verified_user)):
+    last_message_id = response['messages'][-1]['id']
+    last_message_content = response['messages'][-1]['content']
+    if user.email == 'trial@magicboxgifts.com' and '|:----:|:----:|:----:|' in last_message_content:
+        print(user.email)
+        modified_message = ''
+        # Split the table into rows by newline
+        rows = last_message_content.split('\n')
+        for row in rows:
+            # Split the row into columns by pipe
+            columns = row.split('|')
+            if len(columns) >= 1:
+                new_cols = []
+                for column in columns:
+                    # if column matches following format [![product-name](image-file)](url) then print product_name
+                    # For 80% of cases, replace url with 'https://www.magicboxgifts.com/auth' and image-file with '/image_cache/magicbox_icon.png
+                    pattern = r'\[\!\[(.*?)\]\((.*?)\)\]\((.*?)\)'
+                    match = re.match(pattern, column)
+                    if match:
+                        product_name = match.group(1)
+                        image_file_name = match.group(2)
+                        url = match.group(3)
+                        # Generate random number
+                        random_number = random.random() * 100
+                        if random_number <= 50:
+                            new_url = app.state.config.WEBUI_URL
+                            new_image_file_name = '/image_cache/trial_box_icon.png'
+                            new_col = f'[![{product_name}]({new_image_file_name})]({new_url})'
+                        else:
+                            new_col = column
+                        new_cols.append(new_col)
+                    else:
+                        new_cols.append(column)
+                new_row = '|'.join(new_cols)
+                modified_message += new_row + '\n'
+        response['messages'][-1]['content'] = modified_message
+    return response
 
 @app.post("/api/chat/actions/{action_id}")
 async def chat_action(
