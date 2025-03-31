@@ -97,7 +97,7 @@
 				{#if ($user?.email) === TRIAL_USER_EMAIL}
 					<div class="flex justify-center items-center text-lg w-full text-left font-sans" style="color:#EB5352">
 						<span class="px-1">
-							{#if mobile}
+							{#if $mobile}
 								&#8226; {$i18n.t('Limited experience. For more')}<br>
 							{:else}
 								&#8226; {$i18n.t('This is a limited version of the App. To experience full capability')}<br>
