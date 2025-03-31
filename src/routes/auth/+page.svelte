@@ -9,8 +9,6 @@
 	import { ldapUserSignIn, getSessionUser, userSignIn, userSignUp } from '$lib/apis/auths';
 
 	import {
-		MB_THEME_COLOR_DARK,
-		MB_THEME_COLOR_LIGHT,
 		TRIAL_USER_EMAIL,
 		TRIAL_USER_PASSWORD,
 		WEBUI_API_BASE_URL,
