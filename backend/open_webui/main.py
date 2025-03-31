@@ -8,7 +8,6 @@ import shutil
 import sys
 import time
 import random
-import re
 
 from contextlib import asynccontextmanager
 from urllib.parse import urlencode, parse_qs, urlparse
@@ -20,7 +19,6 @@ from aiocache import cached
 import aiohttp
 import requests
 
-from utils import open_webui_app_utils
 
 from fastapi import (
     Depends,
@@ -1079,8 +1077,6 @@ async def chat_completed(
     request: Request, form_data: dict, user=Depends(get_verified_user)
 ):
     try:
-        # Capture latest assistant-message here and manipulate it as needed.
-        magicbox_post_process(form_data, user)
         model_item = form_data.pop("model_item", {})
 
         if model_item.get("direct", False):
@@ -1093,45 +1089,6 @@ async def chat_completed(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e),
         )
-
-
-def magicbox_post_process(response: dict, user=Depends(get_verified_user)):
-    last_message_id = response['messages'][-1]['id']
-    last_message_content = response['messages'][-1]['content']
-    if user.email == 'trial@magicboxgifts.com' and open_webui_app_utils.PRODUCT_LIST_SEPARATOR in last_message_content:
-        modified_message = ''
-        log.info(f"Trial User: {user.email}. Filtering product list.")
-        # Split the table into rows by newline
-        rows = last_message_content.split('\n')
-        num_products = 0
-        filtred_products = 0
-        for row in rows:
-            # Split the row into columns by pipe
-            columns = row.split('|')
-            if len(columns) >= 1:
-                new_cols = []
-                for column in columns:
-                    match = open_webui_app_utils.PRODUCT_MARKDOWN_PATTERN.match(column)
-                    if match:
-                        num_products += 1
-                        product_name = match.group(1)
-                        random_number = random.random() * 100
-                        # 50% chance of replacing the product with a trial-box icon
-                        if random_number <= 50:
-                            new_url = app.state.config.WEBUI_URL
-                            new_image_file_name = '/image_cache/trial_box_icon.png'
-                            new_col = f'[![{product_name}]({new_image_file_name})]({new_url})'
-                            filtred_products += 1
-                        else:
-                            new_col = column
-                        new_cols.append(new_col)
-                    else:
-                        new_cols.append(column)
-                new_row = '|'.join(new_cols)
-                modified_message += new_row + '\n'
-        response['messages'][-1]['content'] = modified_message
-        log.info(f"Filtered {filtred_products} out of {num_products} products for trial user.")
-    return response
 
 
 @app.post("/api/chat/actions/{action_id}")
