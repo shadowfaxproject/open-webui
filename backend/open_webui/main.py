@@ -20,6 +20,7 @@ from aiocache import cached
 import aiohttp
 import requests
 
+from utils import open_webui_app_utils
 
 from fastapi import (
     Depends,
@@ -1093,34 +1094,34 @@ async def chat_completed(
             detail=str(e),
         )
 
+
 def magicbox_post_process(response: dict, user=Depends(get_verified_user)):
     last_message_id = response['messages'][-1]['id']
     last_message_content = response['messages'][-1]['content']
-    if user.email == 'trial@magicboxgifts.com' and '|:----:|:----:|:----:|' in last_message_content:
-        print(user.email)
+    if user.email == 'trial@magicboxgifts.com' and open_webui_app_utils.PRODUCT_LIST_SEPARATOR in last_message_content:
         modified_message = ''
+        log.info(f"Trial User: {user.email}. Filtering product list.")
         # Split the table into rows by newline
         rows = last_message_content.split('\n')
+        num_products = 0
+        filtred_products = 0
         for row in rows:
             # Split the row into columns by pipe
             columns = row.split('|')
             if len(columns) >= 1:
                 new_cols = []
                 for column in columns:
-                    # if column matches following format [![product-name](image-file)](url) then print product_name
-                    # For 80% of cases, replace url with 'https://www.magicboxgifts.com/auth' and image-file with '/image_cache/magicbox_icon.png
-                    pattern = r'\[\!\[(.*?)\]\((.*?)\)\]\((.*?)\)'
-                    match = re.match(pattern, column)
+                    match = open_webui_app_utils.PRODUCT_MARKDOWN_PATTERN.match(column)
                     if match:
+                        num_products += 1
                         product_name = match.group(1)
-                        image_file_name = match.group(2)
-                        url = match.group(3)
-                        # Generate random number
                         random_number = random.random() * 100
+                        # 50% chance of replacing the product with a trial-box icon
                         if random_number <= 50:
                             new_url = app.state.config.WEBUI_URL
                             new_image_file_name = '/image_cache/trial_box_icon.png'
                             new_col = f'[![{product_name}]({new_image_file_name})]({new_url})'
+                            filtred_products += 1
                         else:
                             new_col = column
                         new_cols.append(new_col)
@@ -1129,7 +1130,9 @@ def magicbox_post_process(response: dict, user=Depends(get_verified_user)):
                 new_row = '|'.join(new_cols)
                 modified_message += new_row + '\n'
         response['messages'][-1]['content'] = modified_message
+        log.info(f"Filtered {filtred_products} out of {num_products} products for trial user.")
     return response
+
 
 @app.post("/api/chat/actions/{action_id}")
 async def chat_action(
