@@ -14,12 +14,12 @@
     $: _optionSelected = optionSelected;
 
     function handleClick(option: { title: string, description: string, state: string }) {
-        if (_optionSelected) {
+        if (_optionSelected || option.state === 'selected' || option.state === 'disabled') {
             return;
         } else {
             optionSelected = true;
             selectedTitle = option.title;
-            //console.info('OptionGroup Button clicked:', option)
+            option.state = 'selected';
             dispatch('click', option);
         }
     }
@@ -29,7 +29,7 @@
 <div class="option-group">
     {#each options as option}
         <div class="max-w-[max-content] flex items-center">
-            <button class="{(_optionSelected && selectedTitle === option.title)  ? 'pill-button selected' : _optionSelected ? 'pill-button disabled' : 'pill-button'} rounded-3xl px-5 py-0 flex items-center"
+            <button class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected')  ? 'pill-button selected' : (_optionSelected || option.state === 'disabled') ? 'pill-button disabled' : 'pill-button'} rounded-3xl px-5 py-0 flex items-center"
                 on:click={() => handleClick(option)}
             >
                 {option.title}
@@ -62,6 +62,7 @@
     .pill-button.selected {
         background-color: #EB5352;
         scale: 95%;
+        font-weight: bold;
         cursor: default;
     }
     .pill-button.disabled {

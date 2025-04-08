@@ -179,7 +179,6 @@
 	};
 
 	const parseOptionsFromMessage = (message: string): { title: string; description: string, state: string}[] => {
-		console.info(message)
 		const parsedMessage = JSON.parse(message);
 		const parsedOptions = parsedMessage.options;
 		return parsedOptions.map((option: { title: string; description: string, state: string}) => ({
@@ -189,8 +188,8 @@
 		}));
 	};
 
-	const updateMessage = (message: string, title: string): string => {
-		const parsedMessage = JSON.parse(message);
+	const updateMessage = async (message: MessageType, title: string) => {
+		const parsedMessage = JSON.parse(message.content);
 		// find option that has the same title as the one passed in and update its state = selected. For everything else, set state = disabled
 		const updatedOptions = parsedMessage.options.map((option: { title: string; description: string, state: string }) => {
 			if (option.title === title) {
@@ -199,10 +198,10 @@
 				return { ...option, state: 'disabled' };
 			}
 		});
-		// set this array as value to map with key "options"
-		// and return the updated message
-		const updatedMessage = {options: updatedOptions };
-		return JSON.stringify(updatedMessage);
+		// Save updated message-content as JSON-string in history.
+		const updatedContent = JSON.stringify({options: updatedOptions }, null, 2);
+		saveMessage(message.id, {...message, content: updatedContent});
+		updateChat()
 	};
 
 	const toggleSpeakMessage = async () => {
@@ -827,9 +826,7 @@
 								{:else if message.content && message.error !== true && message.content.includes("\"options\":")}
 									<OptionGroup options={parseOptionsFromMessage(message.content)}
 										on:click={(e) => {const selectedOption = e.detail;
-										//message.content = updateMessage(message.content, selectedOption.title);
-										//console.log('Updated message:', message.content);
-										//saveMessage(message.id, message)
+										updateMessage(message, selectedOption.title);
 										submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
 										}}
 									/>
