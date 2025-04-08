@@ -33,6 +33,7 @@
 	import SkeletonMb from './Skeleton-mb.svelte';
 	import Image from '$lib/components/common/Image.svelte';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
+	import OptionGroup from '$lib/components/common/OptionGroup.svelte';
 	import RateComment from './RateComment.svelte';
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import WebSearchResults from './ResponseMessage/WebSearchResults.svelte';
@@ -175,6 +176,33 @@
 				res();
 			};
 		});
+	};
+
+	const parseOptionsFromMessage = (message: string): { title: string; description: string, state: string}[] => {
+		console.info(message)
+		const parsedMessage = JSON.parse(message);
+		const parsedOptions = parsedMessage.options;
+		return parsedOptions.map((option: { title: string; description: string, state: string}) => ({
+			title: option.title,
+			description: option.description,
+			state: option.state
+		}));
+	};
+
+	const updateMessage = (message: string, title: string): string => {
+		const parsedMessage = JSON.parse(message);
+		// find option that has the same title as the one passed in and update its state = selected. For everything else, set state = disabled
+		const updatedOptions = parsedMessage.options.map((option: { title: string; description: string, state: string }) => {
+			if (option.title === title) {
+				return { ...option, state: 'selected' };
+			} else {
+				return { ...option, state: 'disabled' };
+			}
+		});
+		// set this array as value to map with key "options"
+		// and return the updated message
+		const updatedMessage = {options: updatedOptions };
+		return JSON.stringify(updatedMessage);
 	};
 
 	const toggleSpeakMessage = async () => {
@@ -731,7 +759,7 @@
 							<div class="w-full flex flex-col relative" id="response-content-container">
 								{#if message.content === '' && !message.error}
 									<SkeletonMb />
-								{:else if message.content && message.error !== true}
+								{:else if message.content && message.error !== true && !message.content.includes("\"options\": [")}
 									<!-- always show message contents even if there's an error -->
 									<!-- unless message.error === true which is legacy error handling, where the error message is stored in message.content -->
 									<ContentRenderer
@@ -794,6 +822,15 @@
 												const input = e.detail?.input ?? '';
 												submitMessage(message.id, `\`\`\`\n${content}\n\`\`\`\n${input}`);
 											}
+										}}
+									/>
+								{:else if message.content && message.error !== true && message.content.includes("\"options\":")}
+									<OptionGroup options={parseOptionsFromMessage(message.content)}
+										on:click={(e) => {const selectedOption = e.detail;
+										//message.content = updateMessage(message.content, selectedOption.title);
+										//console.log('Updated message:', message.content);
+										//saveMessage(message.id, message)
+										submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
 										}}
 									/>
 								{/if}
