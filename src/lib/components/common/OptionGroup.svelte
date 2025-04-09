@@ -8,6 +8,8 @@
         { title: 'Option 2', description: 'Description for option 2', state: 'unselected'},
         { title: 'Option 3', description: 'Description for option 3', state: 'unselected'}
     ];
+
+    export let option_context = {header: '', footer: ''};
     export let optionSelected = false
     export let selectedTitle = ''
 
@@ -27,6 +29,9 @@
 
 
 <div class="option-group">
+    {#if option_context.header}
+        {option_context.header}
+    {/if}
     {#each options as option}
         <div class="max-w-[max-content] flex items-center">
             <button class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected')  ? 'pill-button selected' : (_optionSelected || option.state === 'disabled') ? 'pill-button disabled' : 'pill-button'} rounded-3xl px-5 py-0 flex items-center"
@@ -37,6 +42,9 @@
             <span class="description">{option.description}</span>
         </div>
     {/each}
+    {#if option_context.footer}
+        {option_context.footer}
+    {/if}
 </div>
 
 <style>
@@ -61,12 +69,13 @@
     }
     .pill-button.selected {
         background-color: #EB5352;
-        scale: 95%;
+        scale: 100%;
         font-weight: bold;
         cursor: default;
     }
     .pill-button.disabled {
-        background-color: #cfcfcf;
+        background-color: #aaaaaa;
+        color: #7b7b7b;
         scale: 95%;
         cursor: default;
     }

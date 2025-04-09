@@ -188,6 +188,13 @@
 		}));
 	};
 
+	const parseContextFromMessage = (message: string): {header: string, footer: string} => {
+		const parsedMessage = JSON.parse(message);
+		const header = parsedMessage.header_message;
+		const footer = parsedMessage.footer_message;
+		return {header: header, footer: footer};
+	};
+
 	const updateMessage = async (message: MessageType, title: string) => {
 		const parsedMessage = JSON.parse(message.content);
 		// find option that has the same title as the one passed in and update its state = selected. For everything else, set state = disabled
@@ -824,7 +831,7 @@
 										}}
 									/>
 								{:else if message.content && message.error !== true && message.content.includes("\"options\":")}
-									<OptionGroup options={parseOptionsFromMessage(message.content)}
+									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
 										on:click={(e) => {const selectedOption = e.detail;
 										updateMessage(message, selectedOption.title);
 										submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
