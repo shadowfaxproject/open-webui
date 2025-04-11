@@ -210,12 +210,29 @@
 				return { ...option, state: 'disabled' };
 			}
 		});
-		const header_message = parsedMessage.header_message;
-		const footer_message = parsedMessage.footer_message;
 
+		let header_message, footer_message, product_list;
+		if (parsedMessage.header_message) {
+			header_message = parsedMessage.header_message;
+		} else {
+			header_message = '';
+		}
+
+		if (parsedMessage.footer_message) {
+			footer_message = parsedMessage.footer_message;
+		} else {
+			footer_message = '';
+		}
+
+		if (parsedMessage.product_list) {
+			product_list = parsedMessage.product_list;
+			const updatedContent = JSON.stringify({header_message: header_message, footer_message: footer_message, options: updatedOptions, product_list: product_list}, null, 2);
+			saveMessage(message.id, {...message, content: updatedContent});
+		} else {
+			const updatedContent = JSON.stringify({header_message: header_message, footer_message: footer_message, options: updatedOptions}, null, 2);
+			saveMessage(message.id, {...message, content: updatedContent});
+		}
 		// Save updated message-content as JSON-string in history.
-		const updatedContent = JSON.stringify({header_message: header_message, footer_message: footer_message, options: updatedOptions }, null, 2);
-		saveMessage(message.id, {...message, content: updatedContent});
 		updateChat()
 	};
 
