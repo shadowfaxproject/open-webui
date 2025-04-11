@@ -1,6 +1,10 @@
 <!-- OptionGroup.svelte -->
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
+    import {
+		mobile,
+	} from '$lib/stores';
+
     const dispatch = createEventDispatcher();
 
     export let options = [
@@ -39,7 +43,9 @@
             >
                 {option.title}
             </button>
-            <span class="description">{option.description}</span>
+            {#if !$mobile}
+                <span class="description">{option.description}</span>
+            {/if}
         </div>
     {/each}
     {#if option_context.footer_message}
@@ -78,5 +84,6 @@
         color: #7b7b7b;
         scale: 95%;
         cursor: default;
+        pointer-events: none;
     }
 </style>
