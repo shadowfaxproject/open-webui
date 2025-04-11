@@ -182,17 +182,22 @@
 		const parsedMessage = JSON.parse(message);
 		const parsedOptions = parsedMessage.options;
 		return parsedOptions.map((option: { title: string; description: string, state: string}) => ({
-			title: option.title,
-			description: option.description,
+			title: option.title ?? '',
+			description: option.description ?? '',
 			state: option.state
 		}));
 	};
 
-	const parseContextFromMessage = (message: string): {header: string, footer: string} => {
+	const parseContextFromMessage = (message: string): {header_message: string, footer_message: string} => {
 		const parsedMessage = JSON.parse(message);
-		const header = parsedMessage.header_message;
-		const footer = parsedMessage.footer_message;
-		return {header: header, footer: footer};
+		const header_message = parsedMessage.header_message;
+		const footer_message = parsedMessage.footer_message;
+		return {header_message: header_message, footer_message: footer_message};
+	};
+
+	const parseProductListFromMessage = (message: string): string => {
+		const parsedMessage = JSON.parse(message);
+		return parsedMessage.product_list;
 	};
 
 	const updateMessage = async (message: MessageType, title: string) => {
@@ -205,8 +210,11 @@
 				return { ...option, state: 'disabled' };
 			}
 		});
+		const header_message = parsedMessage.header_message;
+		const footer_message = parsedMessage.footer_message;
+
 		// Save updated message-content as JSON-string in history.
-		const updatedContent = JSON.stringify({options: updatedOptions }, null, 2);
+		const updatedContent = JSON.stringify({header_message: header_message, footer_message: footer_message, options: updatedOptions }, null, 2);
 		saveMessage(message.id, {...message, content: updatedContent});
 		updateChat()
 	};
@@ -765,7 +773,7 @@
 							<div class="w-full flex flex-col relative" id="response-content-container">
 								{#if message.content === '' && !message.error}
 									<SkeletonMb />
-								{:else if message.content && message.error !== true && !message.content.includes("\"options\": [")}
+								{:else if message.content && message.error !== true && !message.content.includes("\"options\":") && !message.content.includes("\"product_list\":")}
 									<!-- always show message contents even if there's an error -->
 									<!-- unless message.error === true which is legacy error handling, where the error message is stored in message.content -->
 									<ContentRenderer
@@ -828,6 +836,29 @@
 												const input = e.detail?.input ?? '';
 												submitMessage(message.id, `\`\`\`\n${content}\n\`\`\`\n${input}`);
 											}
+										}}
+									/>
+								{:else if message.content && message.error !== true && message.content.includes("\"product_list\":")}
+									<!-- always show message contents even if there's an error -->
+									<!-- unless message.error === true which is legacy error handling, where the error message is stored in message.content -->
+									<!-- Render Product List -->
+									<ContentRenderer
+										id={message.id}
+										{history}
+										content={parseProductListFromMessage(message.content)}
+										sources={message.sources}
+										floatingButtons={message?.done}
+										save={!readOnly}
+										{model}
+										onTaskClick={async (e) => {
+											console.log(e);
+										}}
+									/>
+									<br>
+									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
+										on:click={(e) => {const selectedOption = e.detail;
+										updateMessage(message, selectedOption.title);
+										submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
 										}}
 									/>
 								{:else if message.content && message.error !== true && message.content.includes("\"options\":")}

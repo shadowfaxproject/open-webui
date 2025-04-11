@@ -9,7 +9,7 @@
         { title: 'Option 3', description: 'Description for option 3', state: 'unselected'}
     ];
 
-    export let option_context = {header: '', footer: ''};
+    export let option_context = {header_message: '', footer_message: ''};
     export let optionSelected = false
     export let selectedTitle = ''
 
@@ -29,8 +29,8 @@
 
 
 <div class="option-group">
-    {#if option_context.header}
-        {option_context.header}
+    {#if option_context.header_message}
+        {option_context.header_message}
     {/if}
     {#each options as option}
         <div class="max-w-[max-content] flex items-center">
@@ -42,8 +42,8 @@
             <span class="description">{option.description}</span>
         </div>
     {/each}
-    {#if option_context.footer}
-        {option_context.footer}
+    {#if option_context.footer_message}
+        {option_context.footer_message}
     {/if}
 </div>
 
