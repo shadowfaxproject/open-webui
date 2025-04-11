@@ -31,7 +31,6 @@
     }
 </script>
 
-
 <div class="option-group">
     {#if option_context.header_message}
         {option_context.header_message}
@@ -44,7 +43,9 @@
                 {option.title}
             </button>
             {#if !$mobile}
-                <span class="description">{option.description}</span>
+                <span class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected')  ? 'description' : (_optionSelected || option.state === 'disabled') ? 'description disabled' : 'description'}">
+                    {option.description}
+                </span>
             {/if}
         </div>
     {/each}
@@ -60,7 +61,12 @@
         gap: 0.5rem;
     }
     .description {
+
         margin-left: 0.5rem;
+    }
+    .description.disabled {
+        margin-left: 0.5rem;
+        display: none;
     }
     .pill-button {
         background-color: #EB8486;
@@ -85,5 +91,6 @@
         scale: 95%;
         cursor: default;
         pointer-events: none;
+        display: none;
     }
 </style>
