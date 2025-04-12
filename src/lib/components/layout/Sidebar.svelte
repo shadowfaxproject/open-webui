@@ -43,6 +43,7 @@
 	import { WEBUI_BASE_URL } from '$lib/constants';
 
 	import ArchivedChatsModal from './Sidebar/ArchivedChatsModal.svelte';
+	import UserMenu from './Sidebar/UserMenu.svelte';
 	import ChatItem from './Sidebar/ChatItem.svelte';
 	import Spinner from '../common/Spinner.svelte';
 	import Loader from '../common/Loader.svelte';
@@ -483,28 +484,29 @@
 	>
 		<div class="px-1.5 flex justify-between space-x-1 text-gray-600 dark:text-gray-400">
 			<button
- 				class=" cursor-pointer p-[7px] flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-900 transition"
- 				on:click={() => {
- 					showSidebar.set(!$showSidebar);
- 				}}
- 			>
- 				<div class=" m-auto self-center">
+				class=" cursor-pointer p-[7px] flex rounded-xl hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+				on:click={() => {
+					showSidebar.set(!$showSidebar);
+				}}
+			>
+				<div class=" m-auto self-center">
 					<svg
- 						xmlns="http://www.w3.org/2000/svg"
- 						fill="none"
- 						viewBox="0 0 24 24"
- 						stroke="currentColor"
- 						stroke-width="2.5"
- 						class="size-3.5"
- 					>
- 					<path
- 						stroke-linecap="round"
- 						stroke-linejoin="round"
- 						d="M15.75 19.5 8.25 12l7.5-7.5"
- 					/>
- 					</svg>
-  				</div>
- 			</button>
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="2"
+						stroke="currentColor"
+						class="size-5"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+						/>
+					</svg>
+				</div>
+			</button>
+
 			<a
 				id="sidebar-new-chat-button"
 				class="flex justify-between items-center flex-1 rounded-lg px-2 py-1 h-full text-right hover:bg-gray-100 dark:hover:bg-gray-900 transition no-drag-region"
@@ -532,7 +534,7 @@
 						/>
 					</div>
 					<div class=" self-center font-medium text-sm text-gray-850 dark:text-white font-primary">
-						{$i18n.t('New Gift Chat')}
+						{$i18n.t('New Chat')}
 					</div>
 				</div>
 
@@ -540,7 +542,7 @@
 					<PencilSquare className=" size-5" strokeWidth="2" />
 				</div>
 			</a>
- 		</div>
+		</div>
 
 		<!-- {#if $user?.role === 'admin'}
 			<div class="px-1.5 flex justify-center text-gray-800 dark:text-gray-200">

@@ -40,7 +40,7 @@
 
 	import 'tippy.js/dist/tippy.css';
 
-	import {TRIAL_USER_EMAIL, WEBUI_BASE_URL, WEBUI_HOSTNAME} from '$lib/constants';
+	import { WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
 	import i18n, { initI18n, getLanguages, changeLanguage } from '$lib/i18n';
 	import { bestMatchingLanguage } from '$lib/utils';
 	import { getAllTags, getChatList } from '$lib/apis/chats';
@@ -267,19 +267,17 @@
 						}
 					}
 
-					if ($user?.email !== TRIAL_USER_EMAIL) {
-						toast.custom(NotificationToast, {
-							componentProps: {
-								onClick: () => {
-									goto(`/c/${event.chat_id}`);
-								},
-								content: content,
-								title: title
+					toast.custom(NotificationToast, {
+						componentProps: {
+							onClick: () => {
+								goto(`/c/${event.chat_id}`);
 							},
-							duration: 15000,
-							unstyled: true
-						});
-					}
+							content: content,
+							title: title
+						},
+						duration: 15000,
+						unstyled: true
+					});
 				}
 			} else if (type === 'chat:title') {
 				currentChatPage.set(1);
@@ -418,19 +416,17 @@
 					}
 				}
 
-				if ($user?.email !== TRIAL_USER_EMAIL) {
-					toast.custom(NotificationToast, {
-						componentProps: {
-							onClick: () => {
-								goto(`/channels/${event.channel_id}`);
-							},
-							content: data?.content,
-							title: event?.channel?.name
+				toast.custom(NotificationToast, {
+					componentProps: {
+						onClick: () => {
+							goto(`/channels/${event.channel_id}`);
 						},
-						duration: 15000,
-						unstyled: true
-					});
-				}
+						content: data?.content,
+						title: event?.channel?.name
+					},
+					duration: 15000,
+					unstyled: true
+				});
 			}
 		}
 	};

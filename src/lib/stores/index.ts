@@ -8,7 +8,6 @@ import emojiShortCodes from '$lib/emoji-shortcodes.json';
 
 // Backend
 export const WEBUI_NAME = writable(APP_NAME);
-export const WEBUI_TAGLINE = writable('Perfect Gifts At Your Fingertips');
 export const config: Writable<Config | undefined> = writable(undefined);
 export const user: Writable<SessionUser | undefined> = writable(undefined);
 
