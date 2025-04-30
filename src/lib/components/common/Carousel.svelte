@@ -8,6 +8,7 @@
    '/assets/images/space.jpg'
   ];
   export let duration = 5000;
+  export let showArrows = true;
   let selectedImageIdx = 0;
 
   onMount(() => {
@@ -35,21 +36,23 @@
    ></div>
   {/each}
 
-  <!-- Left button -->
-  <button
-   class="absolute top-1/2 left-1 transform -translate-y-1/2 text-gray-700 dark:text-gray-300"
-   on:click={prevImage}
-  >
-   &#10094;
-  </button>
+  {#if showArrows}
+    <!-- Left button -->
+    <button
+     class="absolute top-1/2 left-1 transform -translate-y-1/2 text-gray-700 dark:text-gray-300"
+     on:click={prevImage}
+    >
+     &#10094;
+    </button>
 
-  <!-- Right button -->
-  <button
-   class="absolute top-1/2 right-1 transform -translate-y-1/2 text-gray-700 dark:text-gray-300"
-   on:click={nextImage}
-  >
-   &#10095;
-  </button>
+    <!-- Right button -->
+    <button
+     class="absolute top-1/2 right-1 transform -translate-y-1/2 text-gray-700 dark:text-gray-300"
+     on:click={nextImage}
+    >
+     &#10095;
+    </button>
+  {/if}
 </div>
 
 <style>
