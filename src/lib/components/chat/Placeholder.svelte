@@ -7,7 +7,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	import { config, user, models as _models, temporaryChatEnabled } from '$lib/stores';
+	import { config, user, models as _models, temporaryChatEnabled, mobile } from '$lib/stores';
 	import { sanitizeResponseContent, extractCurlyBraceWords } from '$lib/utils';
 	import { WEBUI_BASE_URL } from '$lib/constants';
 
@@ -15,6 +15,8 @@
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
 	import MessageInput from './MessageInput.svelte';
+	import Carousel from '$lib/components/common/Carousel.svelte';
+  import { getProductImages } from '$lib/utils/images';
 
 	const i18n = getContext('i18n');
 
@@ -224,5 +226,14 @@
 				}}
 			/>
 		</div>
+		{#if !$mobile}
+			<div class="flex flex-row justify-center items-center space-x-2">
+				{#each Array(6).fill(0) as _}
+					<div class="relative items-center justify-center h-[250px] w-[125px]">
+						<Carousel imageUrls={getProductImages('/assets/images/product_images/')} showArrows={false} />
+					</div>
+				{/each}
+			</div>
+		{/if}
 	</div>
 </div>

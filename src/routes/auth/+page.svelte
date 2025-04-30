@@ -16,6 +16,7 @@
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import OnBoarding from '$lib/components/OnBoarding.svelte';
 	import Carousel from '$lib/components/common/Carousel.svelte';
+  import { getProductImages } from '$lib/utils/images';
 
 	const i18n = getContext('i18n');
 
@@ -138,22 +139,6 @@
 				};
 			}
 		}
-	}
-
-	const getProductImages = (dir: string = '/assets/images/'): string[] => {
-		// build the array of image URLs
-		// Image files go from 1 to 275 and are named 1.jpeg, 2.jpeg, etc.
-		const imageUrls = [];
-		for (let i = 1; i <= 275; i++) {
-			const imageUrl = `${dir}${i}.jpeg`;
-			imageUrls.push(imageUrl);
-		}
-		// shuffle the array
-		for (let i = imageUrls.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[imageUrls[i], imageUrls[j]] = [imageUrls[j], imageUrls[i]];
-		}
-		return imageUrls;
 	}
 
 	onMount(async () => {
