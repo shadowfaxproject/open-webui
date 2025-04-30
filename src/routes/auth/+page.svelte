@@ -15,6 +15,7 @@
 
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import OnBoarding from '$lib/components/OnBoarding.svelte';
+	import Carousel from '$lib/components/common/Carousel.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -484,6 +485,12 @@
 								</button>
 							</div>
 						{/if}
+						<br>
+						<div class="flex flex-row justify-center items-center space-x-2">
+							<div class="relative  items-center justify-center h-[150px] w-[150px]">
+								<Carousel />
+							</div>
+						</div>
 					</div>
 				{/if}
 				<div class="flex justify-center items-center text-sm w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
