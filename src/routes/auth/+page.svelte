@@ -490,7 +490,7 @@
 						<div class="flex flex-row justify-center items-center space-x-2">
 							{#each Array(6).fill(0) as _}
 								<div class="relative items-center justify-center h-[125px] w-[125px]">
-									<Carousel imageUrls={getProductImages('/assets/images/product_images/')} showArrows={false} />
+									<Carousel imageUrls={getProductImages('/image_cache/demo_product_images/')} showArrows={false} />
 								</div>
 							{/each}
 						</div>
