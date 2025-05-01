@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { toast } from 'svelte-sonner';
 
 	import { onMount, getContext, tick } from 'svelte';
@@ -15,6 +15,8 @@
 
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import OnBoarding from '$lib/components/OnBoarding.svelte';
+	import Carousel from '$lib/components/common/Carousel.svelte';
+  import { getProductImages } from '$lib/utils/images';
 
 	const i18n = getContext('i18n');
 
@@ -484,6 +486,14 @@
 								</button>
 							</div>
 						{/if}
+						<br>
+						<div class="flex flex-row justify-center items-center space-x-2">
+							{#each Array(6).fill(0) as _}
+								<div class="relative items-center justify-center h-[125px] w-[125px]">
+									<Carousel imageUrls={getProductImages('/image_cache/demo_product_images/')} showArrows={false} />
+								</div>
+							{/each}
+						</div>
 					</div>
 				{/if}
 				<div class="flex justify-center items-center text-sm w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
