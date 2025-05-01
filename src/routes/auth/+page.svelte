@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { toast } from 'svelte-sonner';
 
 	import { onMount, getContext, tick } from 'svelte';
@@ -15,6 +15,7 @@
 
 	import Spinner from '$lib/components/common/Spinner.svelte';
 	import OnBoarding from '$lib/components/OnBoarding.svelte';
+	import Carousel from '$lib/components/common/Carousel.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -137,6 +138,22 @@
 				};
 			}
 		}
+	}
+
+	const getProductImages = (dir: string = '/assets/images/'): string[] => {
+		// build the array of image URLs
+		// Image files go from 1 to 275 and are named 1.jpeg, 2.jpeg, etc.
+		const imageUrls = [];
+		for (let i = 1; i <= 275; i++) {
+			const imageUrl = `${dir}${i}.jpeg`;
+			imageUrls.push(imageUrl);
+		}
+		// shuffle the array
+		for (let i = imageUrls.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[imageUrls[i], imageUrls[j]] = [imageUrls[j], imageUrls[i]];
+		}
+		return imageUrls;
 	}
 
 	onMount(async () => {
@@ -484,6 +501,14 @@
 								</button>
 							</div>
 						{/if}
+						<br>
+						<div class="flex flex-row justify-center items-center space-x-2">
+							{#each Array(6).fill(0) as _}
+								<div class="relative items-center justify-center h-[125px] w-[125px]">
+									<Carousel imageUrls={getProductImages('/assets/images/product_images/')} showArrows={false} />
+								</div>
+							{/each}
+						</div>
 					</div>
 				{/if}
 				<div class="flex justify-center items-center text-sm w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
