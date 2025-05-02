@@ -45,10 +45,12 @@
 		if (inputValue.length > 500) {
 			filteredPrompts = [];
 		} else {
-			const newFilteredPrompts =
-				inputValue.trim() && fuse
+			const newFilteredPrompts = [
+				...sortedPrompts.filter((prompt) => prompt.pin === true), // Always include pinned prompts
+				...(inputValue.trim() && fuse
 					? fuse.search(inputValue.trim()).map((result) => result.item)
-					: sortedPrompts;
+					: sortedPrompts.filter((prompt) => !prompt.pin)) // Exclude already included pinned prompts
+			];
 
 			// Compare with the oldFilteredPrompts
 			// If there's a difference, update array + version
