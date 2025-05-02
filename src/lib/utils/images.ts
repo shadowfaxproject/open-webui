@@ -1,6 +1,7 @@
 export const getProductImages = (dir: string = '/assets/images/'): string[] => {
+  const maxImages = 283;
   const imageUrls = [];
-  for (let i = 1; i <= 275; i++) {
+  for (let i = 1; i <= maxImages; i++) {
     const imageUrl = `${dir}${i}.jpeg`;
     imageUrls.push(imageUrl);
   }
