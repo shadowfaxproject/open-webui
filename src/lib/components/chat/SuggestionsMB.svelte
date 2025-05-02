@@ -45,12 +45,16 @@
 	const getFilteredPrompts = (inputValue) => {
 		if (inputValue.length > 500) {
 			filteredPrompts = [];
-		} else {
+		}
+		else if (inputValue.trim() === '') {
+			// If inputValue is empty, show all prompts
+			filteredPrompts = sortedPrompts.filter((prompt) => prompt.pin === true); // Only pinned prompts
+		} else if (inputValue.length > 0) {
 			const newFilteredPrompts = [
-				...sortedPrompts.filter((prompt) => prompt.pin === true), // Always include pinned prompts
 				...(inputValue.trim() && fuse
 					? fuse.search(inputValue.trim()).map((result) => result.item)
-					: sortedPrompts.filter((prompt) => !prompt.pin)) // Exclude already included pinned prompts
+					: sortedPrompts.filter((prompt) => !prompt.pin)), // Exclude already included pinned prompts
+				...sortedPrompts.filter((prompt) => prompt.pin === true) // Always include pinned prompts
 			];
 
 			// Compare with the oldFilteredPrompts
