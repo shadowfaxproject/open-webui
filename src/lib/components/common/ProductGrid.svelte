@@ -35,9 +35,6 @@
     export let selectedProductImages: string[] = [];
     export let generic_description = "This is placeholder text for the product description. It should be replaced with actual product information. Will span 2 lines";
     export let currentImageIndex = 0;
-    export let touchStartX = 0;
-    export let touchEndX = 0;
-
 
     $: _productSelected = productSelected;
 
@@ -72,6 +69,8 @@
         console.log('##### UPDATED showPreviousImage', currentImageIndex);
     }
 
+    let touchStartX = 0;
+    let touchEndX = 0;
 
     function handleTouchStart(event: TouchEvent) {
         touchStartX = event.touches[0].clientX;
@@ -95,23 +94,16 @@
         <div class="carousel-container">
             <button class="close-button" on:click={() => (showProductDetailsModal = false)}>Close</button>
             <!-- Carousel -->
-            <div class="carousel" on:touchstart={handleTouchStart} on:touchmove={handleTouchMove} on:touchend={handleTouchEnd}>
+            <div class="carousel">
                 <button class="carousel-button prev" on:click={() => showPreviousImage()}>❮</button>
                 <img src={selectedProductImages[currentImageIndex]} alt="Product Image" class="carousel-image" />
                 <button class="carousel-button next" on:click={() => showNextImage()}>❯</button>
-            </div>
-            <div class="dots">
-                {#each selectedProductImages as _, index}
-                    <span
-                        class="dot {index === currentImageIndex ? 'active' : ''}"
-                        on:click={() => (currentImageIndex = index)}
-                    ></span>
-                {/each}
             </div>
             <button class="url-button" on:click={() => window.open(productUrl, '_blank')}>Buy</button>
         </div>
     </div>
 {/if}
+
 
 
 <div class="product-grid-container">
@@ -336,24 +328,5 @@
 
     .carousel-button.next {
         right: 1rem;
-    }
-
-    .dots {
-        display: flex;
-        justify-content: center;
-        margin-top: 1rem;
-    }
-
-    .dot {
-        width: 10px;
-        height: 10px;
-        margin: 0 5px;
-        background-color: #ccc;
-        border-radius: 50%;
-        cursor: pointer;
-    }
-
-    .dot.active {
-        background-color: #eb5352;
     }
 </style>
