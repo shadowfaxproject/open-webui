@@ -11,6 +11,7 @@
 	export let suggestionPrompts = [];
 	export let className = '';
 	export let inputValue = '';
+	export let numberOfSuggestions = 5;
 
 	let sortedPrompts = [];
 
@@ -83,7 +84,7 @@
 
 <div class="h-40 overflow-auto scrollbar-none {className} flex flex-wrap gap-2 items-start">
 	{#if filteredPrompts.length > 0}
-		{#each filteredPrompts.slice(0, 4) as prompt, idx (prompt.id || prompt.content)}
+		{#each filteredPrompts.slice(0, numberOfSuggestions) as prompt, idx (prompt.id || prompt.content)}
 			<button
 				class="waterfall flex flex-col flex-1 shrink-0 w-[100px] h-[100px] justify-start text-left
 								px-3 py-2 rounded-xl border border-gray-100 bg-white hover:bg-gray-100
