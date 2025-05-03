@@ -63,9 +63,25 @@
 
 {#if showProductDetailsModal}
     <div class="modal">
-        <div class="carousel-container">
-<!--            <button class="close-button" on:click={() => (showProductDetailsModal = false)}>Close</button>-->
-            <button class="close-button" on:click={() => handleCloseClick()} >Close</button>
+        <div class="carousel-container dark:bg-gray-800 dark:text-gray-100 dark:shadow-gray-400 bg-gray-100 text-gray-800 shadow-md rounded-lg">
+            <button class="close-button px-1 py-1 rounded-xl bg-gray-50 dark:bg-gray-600 border-1 shadow-md" on:click={() => handleCloseClick()} >
+              <div class=" m-auto self-center">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    class="size-3.5"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M6 6l12 12M6 18L18 6"
+                    />
+                </svg>
+              </div>
+            </button>
             <!-- Carousel -->
             {#each selectedProductImages as image}
                 <img src={image} alt="Product Image" class="carousel-image" />
@@ -77,7 +93,7 @@
 
 <div class="product-grid-container">
     <!-- Add text on top -->
-    <!-- JITU - replace this text with actual header -->
+    <!-- TODO: JITU - replace this text with actual header -->
     <p class="grid-header">Please select an product from the grid below:</p>
 
     {#if product_context.header_message}
@@ -96,7 +112,7 @@
                 <p class="grid-item-price">{product.price}</p>
 
                 <button
-                class="absolute top-0 right-0 flex cursor-pointer px-1 py-1 rounded-xl hover:bg-gray-50  transition"
+                class="details-button px-1 py-1 rounded-xl bg-gray-50 border-1 shadow-md"
                 on:click={() => handleViewDetailsClick(product)}
                 >
                     <div class=" m-auto self-center">
@@ -107,12 +123,6 @@
                         </svg>
                     </div>
                 </button>
-<!--                <button-->
-<!--                    class="{(product.state === 'selected') ? 'pill-button selected' : 'pill-button'}"-->
-<!--                    on:click={() => handleViewDetailsClick(product)}-->
-<!--                    >-->
-<!--                    Details-->
-<!--                </button>-->
             </div>
         {/each}
     </div>
@@ -123,6 +133,14 @@
 </div>
 
 <style>
+   .details-button {
+      position:absolute;
+      display: flex;
+      cursor: pointer;
+      top: 0;
+      right: 0;
+    }
+
     .product-grid-container {
         display: flex;
         flex-direction: column;
@@ -220,47 +238,41 @@
     }
 
     .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
 
-.carousel-container {
-    position: relative;
-    background: white;
-    padding: 1rem;
-    border-radius: 8px;
-    max-width: 90%;
-    max-height: 90%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+  .carousel-container {
+      position: relative;
+      padding: 1rem;
+      border-radius: 8px;
+      max-width: 90%;
+      max-height: 90%;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
 
-.carousel-image {
-    max-width: 100%;
-    max-height: 80vh;
-    margin-bottom: 1rem;
-}
+  .carousel-image {
+      max-width: 100%;
+      max-height: 80vh;
+      margin-bottom: 1rem;
+  }
 
-.close-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    background: red;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 2rem;
-    height: 2rem;
-    cursor: pointer;
-}
+  .close-button {
+      position:absolute;
+      display: flex;
+      cursor: pointer;
+      top: 0;
+      right: 0;
+  }
 </style>
