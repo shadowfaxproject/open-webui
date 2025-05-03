@@ -86,7 +86,7 @@
 
     <div class="product-grid">
         {#each products as product}
-            <div class="grid-item">
+            <div class="grid-item dark:bg-gray-400 dark:text-gray-200 dark:shadow-gray-400 bg-gray-100 text-gray-800 shadow-md rounded-lg">
                 <!-- Display image -->
                 <img src={product.thumbnail} alt={product.thumbnail} class="grid-item-image" />
 
@@ -96,7 +96,7 @@
                 <p class="grid-item-price">{product.price}</p>
 
                 <button
-                class="absolute top-0 right-0 flex cursor-pointer px-1 py-1 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+                class="absolute top-0 right-0 flex cursor-pointer px-1 py-1 rounded-xl hover:bg-gray-50  transition"
                 on:click={() => handleViewDetailsClick(product)}
                 >
                     <div class=" m-auto self-center">
@@ -147,9 +147,6 @@
         flex-direction: column;
         text-align: left;
         border: 1px solid #ddd;
-        border-radius: 8px;
-        background-color: #f9f9f9;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
     }
 
     .grid-item-image {
@@ -166,9 +163,6 @@
         align-self: left;
         font-weight: bold;
         margin: 0.5rem 0 0.5rem 1rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
         min-height: 2.4em; /* Ensures space for 2 lines of text */
