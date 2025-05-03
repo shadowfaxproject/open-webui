@@ -49,8 +49,6 @@
 	import { KokoroWorker } from '$lib/workers/KokoroWorker';
 	import FileItem from '$lib/components/common/FileItem.svelte';
 	import OptionGroup from '$lib/components/common/OptionGroup.svelte';
-	import ProductGrid from '$lib/components/common/ProductGrid.svelte';
-
 
 	interface MessageType {
 		id: string;
@@ -176,13 +174,10 @@
 
 	const parseProductListFromMessage = (message: string): string => {
 		const parsedMessage = JSON.parse(message);
-		console.log(message);
-		console.log(parsedMessage);
 		return parsedMessage.product_list;
 	};
 
 	const updateMessage = async (message: MessageType, title: string) => {
-	    console.log('updateMessage', message, title);
 		const parsedMessage = JSON.parse(message.content);
 		// find option that has the same title as the one passed in and update its state = selected. For everything else, set state = disabled
 		const updatedOptions = parsedMessage.options.map((option: { title: string; description: string, state: string }) => {
@@ -912,15 +907,25 @@
 									<!-- always show message contents even if there's an error -->
 									<!-- unless message.error === true which is legacy error handling, where the error message is stored in message.content -->
 									<!-- Render Product List -->
-									<ProductGrid products={parseProductListFromMessage(message.content)}
-                                        on:click={(e) => {
-                                            const selectedOption = e.detail;
-                                            console.log(e);
-                                            updateMessage(message, selectedOption.name);
-                                            submitMessage(message.id, `${selectedOption.name}: ${selectedOption.description}`);
-                                        }}
-                                    />
+									<ContentRenderer
+										id={message.id}
+										{history}
+										content={parseProductListFromMessage(message.content)}
+										sources={message.sources}
+										floatingButtons={message?.done}
+										save={!readOnly}
+										{model}
+										onTaskClick={async (e) => {
+											console.log(e);
+										}}
+									/>
 									<br>
+									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
+										on:click={(e) => {const selectedOption = e.detail;
+										updateMessage(message, selectedOption.title);
+										submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
+										}}
+									/>
 								{:else if message.content && message.error !== true && message.content.includes("\"options\":")}
 									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
 										on:click={(e) => {const selectedOption = e.detail;
