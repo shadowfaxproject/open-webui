@@ -174,11 +174,36 @@
 		return {header_message: header_message, footer_message: footer_message};
 	};
 
-	const parseProductListFromMessage = (message: string): string => {
+	interface Product {
+    product_info: {
+        name: string;
+        display_name: string;
+        description: string;
+        notes: string;
+        price: string;
+        made_by: string;
+        url_id: string;
+        url: string;
+        image_url: string;
+        image_urls: string;
+    };
+    product_tags: {
+        generic_name: string;
+        category: string;
+        age_group: string;
+        gender: string;
+        url_id: string;
+        url: string;
+    };
+    search_score: number;
+    reranker_score: number;
+    thumbnails: string[];
+	}
+
+	const parseProductListFromMessage = (message: string): Product[] => {
 		const parsedMessage = JSON.parse(message);
-		console.log(message);
-		console.log(parsedMessage);
-		return parsedMessage.product_list;
+		const productList: Product[] = JSON.parse(parsedMessage.product_list);
+		return productList;
 	};
 
 	const updateMessage = async (message: MessageType, title: string) => {
@@ -921,6 +946,15 @@
                                         }}
                                     />
 									<br>
+									{#if message.content.includes("\"options\":")}
+										<!-- Render Options -->
+										<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
+											on:click={(e) => {const selectedOption = e.detail;
+											updateMessage(message, selectedOption.title);
+											submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
+											}}
+										/>
+									{/if}
 								{:else if message.content && message.error !== true && message.content.includes("\"options\":")}
 									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
 										on:click={(e) => {const selectedOption = e.detail;

@@ -104,12 +104,12 @@
         {#each products as product}
             <div class="grid-item dark:bg-gray-400 dark:text-gray-200 dark:shadow-gray-400 bg-gray-100 text-gray-800 shadow-md rounded-lg">
                 <!-- Display image -->
-                <img src={product.thumbnail} alt={product.thumbnail} class="grid-item-image" />
+                <img src={product.thumbnails[0]} alt={product.thumbnails[0]} class="grid-item-image" />
 
                 <!-- Display name -->
-                <h3 class="grid-item-name">{product.name}</h3>
+                <h3 class="grid-item-name">{product.product_info.display_name}</h3>
 
-                <p class="grid-item-price">{product.price}</p>
+                <p class="grid-item-price">{product.product_info.price}</p>
 
                 <button
                 class="details-button px-1 py-1 rounded-xl bg-gray-50 border-1 shadow-md"
