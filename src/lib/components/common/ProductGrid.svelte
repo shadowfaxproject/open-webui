@@ -2,70 +2,36 @@
     import { createEventDispatcher } from 'svelte';
     import { mobile } from '$lib/stores';
     import '$lib/styles/pill-button.css'; // Import the shared styles
+    import Carousel from '$lib/components/common/Carousel.svelte';
+    import { getProductImages } from '$lib/utils/images';
 
     const dispatch = createEventDispatcher();
 
 
 
-    export let products = [
-        {
-            name: 'Option 1',
-            description: 'Description for product 1',
-            image: '/path/to/image1.jpg',
-            state: 'unselected'
-        },
-        {
-            name: 'Option 2',
-            description: 'Description for product 2',
-            image: '/path/to/image2.jpg',
-            state: 'unselected'
-        },
-        {
-            name: 'Option 3',
-            description: 'Description for product 3',
-            image: '/path/to/image3.jpg',
-            state: 'unselected'
-        }
-    ];
+    export let products = [];
 
     export let product_context = { header_message: '', footer_message: '' };
-    export let productSelected = false;
-    export let selectedTitle = '';
+    export let productSelected = null;
     export let showProductDetailsModal = false; // New state variable to manage modal
-    export let selectedProductImages: string[] = [];
-    export let generic_description = "This is placeholder text for the product description. It should be replaced with actual product information. Will span 2 lines";
 
     $: _productSelected = productSelected;
 
-    function handleViewDetailsClick(product: { name: string, description: string, image: string, state: string }) {
-      if (product.state === 'selected' || product.state === 'disabled') {
-        return;
-      } else {
-        productSelected = true;
-        selectedTitle = product.name;
-        product.state = 'selected';
+    function handleViewDetailsClick(product) {
         showProductDetailsModal = true; // Show the modal
-        selectedProductImages[0] = product.image;
-        selectedProductImages[1] = product.image;
-      }
+        productSelected = product;
     }
 
     function handleCloseClick() {
         showProductDetailsModal = false;
-        const selectedProduct = products.find(p => p.state === 'selected');
-        if (selectedProduct) {
-            selectedProduct.state = 'unselected';
-            productSelected = false;
-            selectedTitle = '';
-            selectedProductImages = [];
-        }
+        productSelected = null;
     }
 </script>
 
 {#if showProductDetailsModal}
     <div class="modal">
-        <div class="carousel-container dark:bg-gray-800 dark:text-gray-100 dark:shadow-gray-400 bg-gray-100 text-gray-800 shadow-md rounded-lg">
-            <button class="close-button px-1 py-1 rounded-xl bg-gray-50 dark:bg-gray-600 border-1 shadow-md" on:click={() => handleCloseClick()} >
+        <div class="relative items-center justify-center h-[500px] w-[500px]">
+            <button class="close-button px-1 py-1 rounded-xl bg-gray-50 dark:bg-gray-600 border-1 shadow-md z-10" on:click={() => handleCloseClick()} >
               <div class=" m-auto self-center">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -83,11 +49,7 @@
                 </svg>
               </div>
             </button>
-            <!-- Carousel -->
-            {#each selectedProductImages as image}
-                <img src={image} alt="Product Image" class="carousel-image" />
-            {/each}
-            <button class="url-button" on:click={() => window.open(product.url, '_blank')}>Go to Product</button>
+            <Carousel imageUrls={productSelected.thumbnails} showArrows={true} />
         </div>
     </div>
 {/if}
