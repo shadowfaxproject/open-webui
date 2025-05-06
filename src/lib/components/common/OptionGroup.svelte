@@ -4,6 +4,8 @@
     import {
 		mobile,
 	} from '$lib/stores';
+    import '$lib/styles/pill-button.css'; // Import the shared styles
+
 
     const dispatch = createEventDispatcher();
 
@@ -65,31 +67,6 @@
     }
     .description.disabled {
         margin-left: 0.5rem;
-        display: none;
-    }
-    .pill-button {
-        background-color: #EB8486;
-        transition: background-color 0.2s ease;
-        color: white;
-        scale: 95%;
-        cursor: pointer;
-    }
-    .pill-button:hover {
-        background-color: #EB5352;
-        scale: 105%;
-    }
-    .pill-button.selected {
-        background-color: #EB5352;
-        scale: 100%;
-        font-weight: bold;
-        cursor: default;
-    }
-    .pill-button.disabled {
-        background-color: #aaaaaa;
-        color: #7b7b7b;
-        scale: 95%;
-        cursor: default;
-        pointer-events: none;
         display: none;
     }
 </style>

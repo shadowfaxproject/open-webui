@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createEventDispatcher } from 'svelte';
     import { mobile } from '$lib/stores';
+    import '$lib/styles/pill-button.css'; // Import the shared styles
 
     const dispatch = createEventDispatcher();
 
@@ -110,6 +111,13 @@
                 <h3 class="grid-item-name">{product.product_info.display_name}</h3>
                 <p class="grid-item-price">{product.product_info.price ?? ''}</p>
 
+                <!-- Buy now button -->
+                <div class="w-full flex justify-center py-2">
+                    <button class="pill-button rounded-3xl px-5 py-0" on:click={() => window.open(product.product_info.url, '_blank')}>
+                        {'Buy Now'}
+                    </button>
+                </div>
+
                 <button
                 class="details-button px-1 py-1 rounded-lg bg-gray-200 border-1"
                 on:click={() => handleViewDetailsClick(product)}
@@ -186,54 +194,28 @@
         line-height: 1.2em; /* Adjust line height to match the text spacing */
     }
 
-    .grid-item-description {
-        font-size: 0.9rem;
+    .grid-item-price {
+        font-size: 1rem;
         align-self: left;
-        color: #555;
+        font-weight: bold;
         margin: 0.5rem 0 0.5rem 1rem;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
         min-height: 2.4em; /* Ensures space for 2 lines of text */
         line-height: 1.2em; /* Adjust line height to match the text spacing */
     }
 
-    .grid-item-price {
-        font-size: 1rem;
+    .grid-item-description {
+        font-size: 0.9rem;
         align-self: left;
-        font-weight: bold;
+        color: #555;
         margin: 0.5rem 0 0.5rem 1rem;
-        margin: 1rem 0 1rem 1rem;
-    }
-
-    .pill-button {
-        background-color: #eb5352;
-        transition: background-color 0.2s ease;
-        color: white;
-        padding: 0.5rem 1rem;
-        margin: 0rem auto 0.5rem;
-        border: none;
-        border-radius: 20px;
-        cursor: pointer;
-        padding: 0.3rem 0.8rem;
-    }
-
-    .pill-button:hover {
-        background-color: #EB5352;
-    }
-
-    .pill-button.selected {
-        background-color: #EB5352;
-        font-weight: bold;
-        cursor: default;
-    }
-
-    .pill-button.disabled {
-        background-color: #aaaaaa;
-        color: #7b7b7b;
-        cursor: not-allowed;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-height: 2.4em; /* Ensures space for 2 lines of text */
+        line-height: 1.2em; /* Adjust line height to match the text spacing */
     }
 
     .modal {
