@@ -112,8 +112,8 @@
                 <p class="grid-item-price">{product.product_info.price ?? ''}</p>
 
                 <!-- Buy now button -->
-                <div class="w-full flex justify-center py-2">
-                    <button class="pill-button rounded-3xl px-5 py-0" on:click={() => window.open(product.product_info.url, '_blank')}>
+                <div class="grid-item-footer w-full flex justify-center py-1">
+                    <button class="pill-button rounded-3xl px-3" on:click={() => window.open(product.product_info.url, '_blank')}>
                         {'Buy Now'}
                     </button>
                 </div>
@@ -172,6 +172,10 @@
         flex-direction: column;
         text-align: left;
         border: 1px solid #ddd;
+    }
+
+    .grid-item-footer {
+       margin-top: auto;
     }
 
     .grid-item-image {
