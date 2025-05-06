@@ -4,6 +4,8 @@
     import {
 		mobile,
 	} from '$lib/stores';
+    import '$lib/styles/pill-button.css'; // Import the shared styles
+
 
     const dispatch = createEventDispatcher();
 
@@ -20,7 +22,7 @@
     $: _optionSelected = optionSelected;
 
     function handleClick(option: { title: string, description: string, state: string }) {
-        if (_optionSelected || option.state === 'selected' || option.state === 'disabled') {
+        if (option.state === 'selected' || option.state === 'disabled') {
             return;
         } else {
             optionSelected = true;
@@ -37,13 +39,13 @@
     {/if}
     {#each options as option}
         <div class="max-w-[max-content] flex items-center">
-            <button class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected')  ? 'pill-button selected' : (_optionSelected || option.state === 'disabled') ? 'pill-button disabled' : 'pill-button'} rounded-3xl px-5 py-0 flex items-center"
+            <button class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected')  ? 'pill-button selected' : (_optionSelected && option.state === 'disabled') ? 'pill-button disabled' : 'pill-button'} rounded-3xl px-5 py-0 flex items-center"
                 on:click={() => handleClick(option)}
             >
                 {option.title}
             </button>
             {#if !$mobile}
-                <span class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected')  ? 'description' : (_optionSelected || option.state === 'disabled') ? 'description disabled' : 'description'}">
+                <span class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected') || (option.state === 'unselected') ? 'description' : (_optionSelected || option.state === 'disabled') ? 'description disabled' : 'description'}">
                     {option.description}
                 </span>
             {/if}
@@ -65,31 +67,6 @@
     }
     .description.disabled {
         margin-left: 0.5rem;
-        display: none;
-    }
-    .pill-button {
-        background-color: #EB8486;
-        transition: background-color 0.2s ease;
-        color: white;
-        scale: 95%;
-        cursor: pointer;
-    }
-    .pill-button:hover {
-        background-color: #EB5352;
-        scale: 105%;
-    }
-    .pill-button.selected {
-        background-color: #EB5352;
-        scale: 100%;
-        font-weight: bold;
-        cursor: default;
-    }
-    .pill-button.disabled {
-        background-color: #aaaaaa;
-        color: #7b7b7b;
-        scale: 95%;
-        cursor: default;
-        pointer-events: none;
         display: none;
     }
 </style>
