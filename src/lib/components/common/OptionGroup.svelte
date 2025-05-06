@@ -20,7 +20,7 @@
     $: _optionSelected = optionSelected;
 
     function handleClick(option: { title: string, description: string, state: string }) {
-        if (_optionSelected || option.state === 'selected' || option.state === 'disabled') {
+        if (option.state === 'selected' || option.state === 'disabled') {
             return;
         } else {
             optionSelected = true;
@@ -37,13 +37,13 @@
     {/if}
     {#each options as option}
         <div class="max-w-[max-content] flex items-center">
-            <button class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected')  ? 'pill-button selected' : (_optionSelected || option.state === 'disabled') ? 'pill-button disabled' : 'pill-button'} rounded-3xl px-5 py-0 flex items-center"
+            <button class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected')  ? 'pill-button selected' : (_optionSelected && option.state === 'disabled') ? 'pill-button disabled' : 'pill-button'} rounded-3xl px-5 py-0 flex items-center"
                 on:click={() => handleClick(option)}
             >
                 {option.title}
             </button>
             {#if !$mobile}
-                <span class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected')  ? 'description' : (_optionSelected || option.state === 'disabled') ? 'description disabled' : 'description'}">
+                <span class="{(_optionSelected && selectedTitle === option.title) || (option.state === 'selected') || (option.state === 'unselected') ? 'description' : (_optionSelected || option.state === 'disabled') ? 'description disabled' : 'description'}">
                     {option.description}
                 </span>
             {/if}
