@@ -102,17 +102,16 @@
 
     <div class="product-grid">
         {#each products as product}
-            <div class="grid-item dark:bg-gray-400 dark:text-gray-200 dark:shadow-gray-400 bg-gray-100 text-gray-800 shadow-md rounded-lg">
+            <div class="grid-item dark:bg-gray-800 dark:text-gray-200 dark:shadow-gray-400 bg-gray-100 text-gray-800 shadow-md rounded-lg">
                 <!-- Display image -->
                 <img src={product.thumbnails[0]} alt={product.thumbnails[0]} class="grid-item-image" />
 
                 <!-- Display name -->
                 <h3 class="grid-item-name">{product.product_info.display_name}</h3>
-
-                <p class="grid-item-price">{product.product_info.price}</p>
+                <p class="grid-item-price">{product.product_info.price ?? ''}</p>
 
                 <button
-                class="details-button px-1 py-1 rounded-xl bg-gray-50 border-1 shadow-md"
+                class="details-button px-1 py-1 rounded-lg bg-gray-200 border-1"
                 on:click={() => handleViewDetailsClick(product)}
                 >
                     <div class=" m-auto self-center">
