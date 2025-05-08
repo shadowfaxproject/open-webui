@@ -30,7 +30,7 @@
 
 {#if showProductDetailsModal}
     <div class="modal">
-        <div class="relative items-center justify-center h-[500px] w-[500px]">
+        <div class="relative items-center justify-center h-[400px] w-[400px]">
             <button class="close-button px-1 py-1 rounded-xl bg-gray-50 dark:bg-gray-600 border-1 shadow-md z-10" on:click={() => handleCloseClick()} >
               <div class=" m-auto self-center">
                 <svg
@@ -49,7 +49,7 @@
                 </svg>
               </div>
             </button>
-            <Carousel imageUrls={productSelected.thumbnails} showArrows={true} />
+            <Carousel imageUrls={productSelected.thumbnails} showArrows={true} duration={3000} />
         </div>
     </div>
 {/if}
