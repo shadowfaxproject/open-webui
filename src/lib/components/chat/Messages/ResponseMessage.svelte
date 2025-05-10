@@ -176,28 +176,43 @@
 
 	interface Product {
     product_info: {
-        name: string;
-        display_name: string;
-        description: string;
-        notes: string;
-        price: string;
-        made_by: string;
-        url_id: string;
-        url: string;
-        image_url: string;
-        image_urls: string;
+			name: string;
+			display_name: string;
+			description: string;
+			notes: string;
+			price: string;
+			made_by: string;
+			url_id: string;
+			url: string;
+			image_url: string;
+			image_urls: string;
     };
     product_tags: {
-        generic_name: string;
-        category: string;
-        age_group: string;
-        gender: string;
-        url_id: string;
-        url: string;
+			generic_name: string;
+			category: string;
+			age_group: string;
+			gender: string;
+			url_id: string;
+			url: string;
     };
     search_score: number;
     reranker_score: number;
     thumbnails: string[];
+		experience_info: {
+			name: string;
+			display_name: string;
+			description: string;
+			price: string;
+			rating: string;
+			city: string;
+			state: string;
+			country: string;
+			zipcode: string;
+			phone: string;
+			url: string;
+			image_url: string;
+			image_urls: string;
+		};
 	}
 
 	const parseProductListFromMessage = (message: string): Product[] => {
