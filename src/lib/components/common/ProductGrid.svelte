@@ -56,9 +56,6 @@
 
 <div class="product-grid-container">
     <!-- Add text on top -->
-    <!-- TODO: JITU - replace this text with actual header -->
-    <p class="grid-header">Please select an product from the grid below:</p>
-
     {#if product_context.header_message}
         {product_context.header_message}
     {/if}
