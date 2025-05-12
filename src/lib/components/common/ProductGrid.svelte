@@ -30,8 +30,8 @@
 
 {#if showProductDetailsModal}
     <div class="modal">
-        <div class="relative items-center justify-center h-[400px] w-[400px]">
-            <button class="close-button px-1 py-1 rounded-xl bg-gray-50 dark:bg-gray-600 border-1 shadow-md z-10" on:click={() => handleCloseClick()} >
+        <div class="relative items-center justify-center h-[400px] w-[400px] border-1 rounded-lg">
+            <button class="close-button px-1 py-1 rounded-lg bg-gray-50 dark:bg-gray-600 border-1 shadow-md z-10" on:click={() => handleCloseClick()} >
               <div class=" m-auto self-center">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -2,6 +2,7 @@
 	import { getContext } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import { fade } from 'svelte/transition';
+	import '$lib/styles/pill-button.css'; // Import the shared styles
 
 	import {
 		WEBUI_NAME,
@@ -105,7 +106,7 @@
 						<ModelSelector bind:selectedModels showSetDefault={!shareEnabled} />
 					{/if}
 					{#if ($user?.email) === TRIAL_USER_EMAIL}
-						<div class="flex justify-center items-center text-lg w-full text-left font-sans" style="color:#EB5352">
+						<div class="flex justify-center items-center text-base w-full text-left font-sans" style="color:#EB5352">
 							<span class="px-1">
 								{#if $mobile}
 									{$i18n.t('Limited experience. For more')}<br>
@@ -114,7 +115,7 @@
 								{/if}
 							</span>
 							<button
-								class="bg-[#EB8486] hover:bg-[#EB5352] text-white/60 hover:text-white transition w-max rounded-full font-medium text-sm py-1 px-4"
+								class="pill-button transition w-max rounded-full font-medium text-sm py-1 px-4"
 								on:click={async () => {
 									await userSignOut();
 									user.set(null);

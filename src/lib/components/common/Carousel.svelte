@@ -12,11 +12,13 @@
   let selectedImageIdx = 0;
 
   onMount(() => {
-    let interval = setInterval(() => {
-      nextImage();
-    }, duration);
+    if (imageUrls.length > 1) {
+      let interval = setInterval(() => {
+        nextImage();
+      }, duration);
 
-    return () => clearInterval(interval);
+      return () => clearInterval(interval);
+    }
   });
 
   function nextImage() {
@@ -36,7 +38,7 @@
    ></div>
   {/each}
 
-  {#if showArrows}
+  {#if showArrows && imageUrls.length > 1}
     <!-- Left button -->
     <button
      class="absolute top-1/2 left-1 transform -translate-y-1/2 text-gray-300 text-3xl p-2"
