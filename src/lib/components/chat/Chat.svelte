@@ -2015,6 +2015,7 @@
 									{mergeResponses}
 									{chatActionHandler}
 									{addMessages}
+									{initNewChat}
 									bottomPadding={files.length > 0}
 								/>
 							</div>

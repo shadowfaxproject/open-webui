@@ -45,6 +45,7 @@
 	export let showMessage: Function = () => {};
 	export let submitMessage: Function = () => {};
 	export let addMessages: Function = () => {};
+	export let initNewChat: Function = () => {};
 
 	export let readOnly = false;
 
@@ -450,6 +451,7 @@
 							{continueResponse}
 							{mergeResponses}
 							{addMessages}
+							{initNewChat}
 							{triggerScroll}
 							{readOnly}
 						/>
