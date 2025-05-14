@@ -912,7 +912,7 @@
 		console.info(responseMessageId)
 		if (messageElement) {
 				window.setTimeout(() => {
-					messageElement.scrollIntoView({ behavior: 'smooth' });
+					messageElement.scrollIntoView({ behavior: 'instant' });
 				}, 0);
 		}
 
