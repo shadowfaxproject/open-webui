@@ -957,12 +957,9 @@
 									<!-- Render Product List -->
 									<ProductGrid products={parseProductListFromMessage(message.content)}
                                         on:click={(e) => {
-                                            const selectedOption = e.detail;
                                             console.log(e);
-                                            updateMessage(message, selectedOption.name);
-                                            submitMessage(message.id, `${selectedOption.name}: ${selectedOption.description}`);
                                         }}
-                                    />
+									/>
 									<br>
 									{#if message.content.includes("\"options\":")}
 										<!-- Render Options -->
@@ -975,9 +972,10 @@
 									{/if}
 								{:else if message.content && message.error !== true && message.content.includes("\"options\":")}
 									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
-										on:click={(e) => {const selectedOption = e.detail;
-										updateMessage(message, selectedOption.title);
-										submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
+										on:click={(e) => {
+											const selectedOption = e.detail;
+											updateMessage(message, selectedOption.title);
+											submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
 										}}
 									/>
 								{/if}
