@@ -42,6 +42,24 @@
 	import { getFileContentById } from '$lib/apis/files';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { Toaster, toast } from 'svelte-sonner';
+
+	import { executeToolServer, getBackendConfig } from '$lib/apis';
+	import { getSessionUser, userSignOut } from '$lib/apis/auths';
+
+	import '../tailwind.css';
+	import '../app.css';
+
+	import 'tippy.js/dist/tippy.css';
+
+	import { TRIAL_USER_EMAIL, WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
+	import i18n, { initI18n, getLanguages, changeLanguage } from '$lib/i18n';
+	import { bestMatchingLanguage } from '$lib/utils';
+	import { getAllTags, getChatList } from '$lib/apis/chats';
+	import NotificationToast from '$lib/components/NotificationToast.svelte';
+	import AppSidebar from '$lib/components/app/AppSidebar.svelte';
+	import { chatCompletion } from '$lib/apis/openai';
+
 	import { beforeNavigate } from '$app/navigation';
 	import { updated } from '$app/state';
 
@@ -612,17 +630,19 @@
 						}
 					}
 
-					toast.custom(NotificationToast, {
-						componentProps: {
-							onClick: () => {
-								goto(`/c/${event.chat_id}`);
+					if ($user?.email !== TRIAL_USER_EMAIL) {
+						toast.custom(NotificationToast, {
+							componentProps: {
+								onClick: () => {
+									goto(`/c/${event.chat_id}`);
+								},
+								content: content,
+								title: displayTitle
 							},
-							content: content,
-							title: displayTitle
-						},
-						duration: 15000,
-						unstyled: true
-					});
+							duration: 15000,
+							unstyled: true
+						});
+					}
 				}
 			} else if (type === 'chat:title') {
 				currentChatPage.set(1);
@@ -720,17 +740,19 @@
 					}
 				}
 
-				toast.custom(NotificationToast, {
-					componentProps: {
-						onClick: () => {
-							goto(`/channels/${event.channel_id}`);
+				if ($user?.email !== TRIAL_USER_EMAIL) {
+					toast.custom(NotificationToast, {
+						componentProps: {
+							onClick: () => {
+								goto(`/channels/${event.channel_id}`);
+							},
+							content: data?.content,
+							title: event?.channel?.name
 						},
-						content: data?.content,
-						title: `${title}`
-					},
-					duration: 15000,
-					unstyled: true
-				});
+						duration: 15000,
+						unstyled: true
+					});
+				}
 			}
 		}
 	};

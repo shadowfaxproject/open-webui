@@ -301,7 +301,7 @@ class ChatTable:
                     'id': id,
                     'user_id': user_id,
                     'title': self._clean_null_bytes(
-                        form_data.chat['title'] if 'title' in form_data.chat else 'New Chat'
+                        form_data.chat['title'] if 'title' in form_data.chat else 'New Gift Chat'
                     ),
                     'chat': self._clean_null_bytes(form_data.chat),
                     'folder_id': form_data.folder_id,
@@ -388,7 +388,7 @@ class ChatTable:
             async with get_async_db_context(db) as db:
                 chat_item = await db.get(Chat, id)
                 chat_item.chat = self._clean_null_bytes(chat)
-                chat_item.title = self._clean_null_bytes(chat['title']) if 'title' in chat else 'New Chat'
+                chat_item.title = self._clean_null_bytes(chat['title']) if 'title' in chat else 'New Gift Chat'
 
                 chat_item.updated_at = int(time.time())
 

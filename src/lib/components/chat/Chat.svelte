@@ -1535,6 +1535,32 @@
 			currentChatPage.set(1);
 			await chats.set(await getChatList(localStorage.token, $currentChatPage));
 		}
+
+		await tick();
+
+		if ($chatId == _chatId) {
+			if (!$temporaryChatEnabled) {
+				chat = await updateChatById(localStorage.token, _chatId, {
+					models: selectedModels,
+					messages: messages,
+					history: history,
+					params: params,
+					files: chatFiles
+				});
+
+				currentChatPage.set(1);
+				await chats.set(await getChatList(localStorage.token, $currentChatPage));
+			}
+		}
+
+		// Bring focus on top of the latest response message (instead of the bottom)
+		const messageElement = document.getElementById(`message-${responseMessageId}`);
+		if (messageElement) {
+			window.setTimeout(() => {
+				messageElement.scrollIntoView({ behavior: 'instant' });
+			}, 0);
+		}
+
 		taskIds = null;
 	};
 
@@ -2773,7 +2799,7 @@
 				localStorage.token,
 				{
 					id: _chatId,
-					title: $i18n.t('New Chat'),
+					title: $i18n.t('New Gift Chat'),
 					models: selectedModels,
 					system: $settings.system ?? undefined,
 					params: params,
@@ -3086,6 +3112,7 @@
 										{chatActionHandler}
 										{addMessages}
 										topPadding={true}
+										{initNewChat}
 										bottomPadding={files.length > 0}
 										{onSelect}
 									/>

@@ -4,53 +4,31 @@
 
 	import { settings } from '$lib/stores';
 	import ImagePreview from './ImagePreview.svelte';
-	import XMark from '$lib/components/icons/XMark.svelte';
-	import { getContext } from 'svelte';
 
 	export let src = '';
 	export let alt = '';
 
-	export let className = ` w-full ${($settings?.highContrastMode ?? false) ? '' : 'outline-hidden focus:outline-hidden'}`;
-
-	export let imageClassName = 'rounded-lg';
-
-	export let dismissible = false;
-	export let onDismiss = () => {};
-
-	const i18n = getContext('i18n');
+	export let className = ' w-full outline-hidden z-10';
+	export let imageClassName = 'rounded-lg mx-auto scale-85 hover:scale-115 shadow-[0_-4px_10px_rgba(0,0,0,0.5)] hover:shadow-[0_-6px_15px_rgba(0,0,0,0.6)]';
 
 	let _src = '';
 	$: _src = safeImageUrl(src.startsWith('/') ? `${WEBUI_BASE_URL}${src}` : src);
 
+	let _caption = '';
+	$: _caption = alt;
+
 	let showImagePreview = false;
 </script>
 
+<button
+	class={`text-center ${className}`}
+	on:click={() => {
+		showImagePreview = false;
+	}}
+	type="button"
+>
+	<img src={_src} {alt} class={imageClassName} draggable="false" data-cy="image" />
+	{@html _caption}
+</button>
+
 <ImagePreview bind:show={showImagePreview} src={_src} {alt} />
-
-<div class=" relative group w-fit flex items-center">
-	<button
-		class={className}
-		on:click={() => {
-			showImagePreview = true;
-		}}
-		aria-label={$i18n.t('Show image preview')}
-		type="button"
-	>
-		<img src={_src} {alt} class={imageClassName} draggable="false" data-cy="image" />
-	</button>
-
-	{#if dismissible}
-		<div class=" absolute -top-1 -right-1">
-			<button
-				aria-label={$i18n.t('Remove image')}
-				class=" bg-white text-black border border-white rounded-full group-hover:visible invisible transition"
-				type="button"
-				on:click={() => {
-					onDismiss();
-				}}
-			>
-				<XMark className={'size-4'} />
-			</button>
-		</div>
-	{/if}
-</div>

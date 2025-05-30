@@ -384,6 +384,7 @@ from open_webui.config import (
     # WebUI
     WEBUI_AUTH,
     WEBUI_NAME,
+    WEBUI_TAGLINE,
     WEBUI_BANNERS,
     WEBHOOK_URL,
     ADMIN_EMAIL,
@@ -756,7 +757,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title='Open WebUI',
+    title='Magicbox',
     docs_url='/docs' if ENV == 'dev' else None,
     openapi_url='/openapi.json' if ENV == 'dev' else None,
     redoc_url=None,
@@ -784,6 +785,7 @@ app.state.config = AppConfig(
 app.state.redis = None
 
 app.state.WEBUI_NAME = WEBUI_NAME
+app.state.WEBUI_TAGLINE = WEBUI_TAGLINE
 app.state.LICENSE_METADATA = None
 
 
@@ -1683,6 +1685,10 @@ async def chat_completion(
     model_item = form_data.pop('model_item', {})
     tasks = form_data.pop('background_tasks', None)
 
+    # Force title generation to be enabled each time
+    if not tasks or 'title_generation' not in tasks:
+        tasks = {'title_generation': True}
+
     metadata = {}
     try:
         model_info = None
@@ -2351,6 +2357,7 @@ async def get_app_config(request: Request):
         **({'onboarding': True} if onboarding else {}),
         'status': True,
         'name': app.state.WEBUI_NAME,
+        'tagline': app.state.WEBUI_TAGLINE,
         'version': VERSION,
         'default_locale': str(DEFAULT_LOCALE),
         'oauth': {'providers': {name: config.get('name', name) for name, config in OAUTH_PROVIDERS.items()}},
@@ -2800,10 +2807,11 @@ async def get_manifest_json():
         return {
             'name': app.state.WEBUI_NAME,
             'short_name': app.state.WEBUI_NAME,
-            'description': f'{app.state.WEBUI_NAME} is an open, extensible, user-friendly interface for AI that adapts to your workflow.',
+            'description': app.state.WEBUI_TAGLINE,
             'start_url': '/',
             'display': 'standalone',
             'background_color': '#343541',
+            'orientation': 'any',
             'icons': [
                 {
                     'src': '/static/logo.png',

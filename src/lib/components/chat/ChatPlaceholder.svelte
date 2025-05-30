@@ -8,7 +8,7 @@
 
 	import { blur, fade } from 'svelte/transition';
 
-	import Suggestions from './Suggestions.svelte';
+	import SuggestionsMB from './SuggestionsMB.svelte';
 	import { sanitizeResponseContent } from '$lib/utils';
 	import Tooltip from '$lib/components/common/Tooltip.svelte';
 	import EyeSlash from '$lib/components/icons/EyeSlash.svelte';
@@ -124,8 +124,8 @@
 							</div>
 						{/if}
 					{:else}
-						<div class=" text-gray-400 dark:text-gray-500 line-clamp-1 font-p">
-							{$i18n.t('How can I help you today?')}
+						<div class=" font-medium text-gray-400 dark:text-gray-500 line-clamp-1 font-p">
+							{$i18n.t("I'm Magicbox, your gift-finding assistant. How can I help you today?")}
 						</div>
 					{/if}
 				</div>
@@ -133,7 +133,7 @@
 		</div>
 
 		<div class=" w-full font-primary" in:fade={{ duration: 200, delay: 300 }}>
-			<Suggestions
+			<SuggestionsMB
 				className="grid grid-cols-2"
 				suggestionPrompts={atSelectedModel?.info?.meta?.suggestion_prompts ??
 					models[selectedModelIdx]?.info?.meta?.suggestion_prompts ??

@@ -300,7 +300,7 @@ async def rag_template(template: str, context: str, query: str):
 async def title_generation_template(template: str, messages: list[dict], user: Optional[Any] = None) -> str:
     prompt = get_last_user_message(messages)
     template = replace_prompt_variable(template, prompt)
-    template = replace_messages_variable(template, messages)
+    template = replace_messages_variable(template, [])
 
     template = await prompt_template(template, user)
 

@@ -557,7 +557,7 @@
 				</div>
 			{/if}
 
-			{#if help}
+			{#if help && $user?.role === 'admin'}
 				<hr class=" border-gray-50/30 dark:border-gray-800/30 my-1 p-0" />
 
 				<!-- {$i18n.t('Help')} -->
@@ -638,9 +638,8 @@
 				<div class=" self-center truncate">{$i18n.t('Sign Out')}</div>
 			</button>
 
-			{#if showActiveUsers && ($config?.features?.enable_public_active_users_count || role === 'admin') && usage}
-				{#if usage?.user_count}
-					<hr class=" border-gray-50/30 dark:border-gray-800/30 my-1 p-0" />
+			{#if $activeUserIds?.length > 0 && $user?.role === 'admin'}
+				<hr class=" border-gray-100 dark:border-gray-800 my-1 p-0" />
 
 					<Tooltip
 						content={usage?.model_ids && usage?.model_ids.length > 0

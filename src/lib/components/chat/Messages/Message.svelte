@@ -43,6 +43,7 @@
 	export let readOnly = false;
 	export let editCodeBlock = true;
 	export let topPadding = false;
+	export let initNewChat: Function = () => {};
 </script>
 
 <div
@@ -98,6 +99,7 @@
 				{readOnly}
 				{editCodeBlock}
 				{topPadding}
+				{initNewChat}
 			/>
 		{:else}
 			{#key messageId}

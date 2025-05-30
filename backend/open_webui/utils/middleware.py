@@ -3182,10 +3182,8 @@ async def background_tasks_handler(ctx):
 
                                 title_string = (
                                     response_message.get('content')
-                                    or response_message.get(
-                                        'reasoning_content',
-                                    )
-                                    or message.get('content', user_message)
+                                    or response_message.get('reasoning_content')
+                                    or message.get('content', 'New Gift Chat')
                                 )
                             else:
                                 title_string = ''
@@ -3193,12 +3191,12 @@ async def background_tasks_handler(ctx):
                             title_string = title_string[title_string.find('{') : title_string.rfind('}') + 1]
 
                             try:
-                                title = json.loads(title_string).get('title', user_message)
-                            except Exception as e:
-                                title = ''
+                                title = json.loads(title_string).get('title', 'New Gift Chat')
+                            except Exception:
+                                title = title_string
 
                             if not title:
-                                title = messages[0].get('content', user_message)
+                                title = messages[0].get('content', 'New Gift Chat')
 
                             await Chats.update_chat_title_by_id(metadata['chat_id'], title)
 
@@ -3208,16 +3206,15 @@ async def background_tasks_handler(ctx):
                                     'data': title,
                                 }
                             )
-
                     if title == None and len(messages) == 2 and (not messages_map or len(messages_map) <= 2):
-                        title = messages[0].get('content', user_message)
+                        title = messages[0].get('content', 'New Gift Chat')
 
                         await Chats.update_chat_title_by_id(metadata['chat_id'], title)
 
                         await event_emitter(
                             {
                                 'type': 'chat:title',
-                                'data': message.get('content', user_message),
+                                'data': message.get('content', 'New Gift Chat'),
                             }
                         )
 

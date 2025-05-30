@@ -35,6 +35,8 @@ from open_webui.config import (
     DEFAULT_MOA_GENERATION_PROMPT_TEMPLATE,
     DEFAULT_VOICE_MODE_PROMPT_TEMPLATE,
 )
+from commons.ChatState import ChatState
+
 
 log = logging.getLogger(__name__)
 
@@ -155,6 +157,18 @@ async def update_task_config(request: Request, form_data: TaskConfigForm, user=D
 
 @router.post('/title/completions')
 async def generate_title(request: Request, form_data: dict, user=Depends(get_verified_user)):
+    chat_state = ChatState.load(form_data["chat_id"])
+    if not chat_state.gift_request:
+        logging.debug("gift_request not ready. Do not generate title")
+        return
+    elif chat_state.title_generated:
+        logging.debug("Title already generated. return the existing title")
+        return chat_state.chat_title
+    elif not chat_state.gift_request.has_title_fields():
+        logging.debug("gift_request does not have minimal info. Do not generate title")
+        return
+    logging.info("generate_title")
+
     if not request.app.state.config.ENABLE_TITLE_GENERATION:
         return JSONResponse(
             status_code=status.HTTP_200_OK,
@@ -194,7 +208,7 @@ async def generate_title(request: Request, form_data: dict, user=Depends(get_ver
 
     content = await title_generation_template(template, form_data['messages'], user)
 
-    max_tokens = models[task_model_id].get('info', {}).get('params', {}).get('max_tokens', 1000)
+    max_tokens = models[task_model_id].get('info', {}).get('params', {}).get('max_tokens', 50)
 
     payload = {
         'model': task_model_id,
@@ -222,7 +236,9 @@ async def generate_title(request: Request, form_data: dict, user=Depends(get_ver
         raise e
 
     try:
-        return await generate_chat_completion(request, form_data=payload, user=user)
+        chat_title = await generate_chat_completion(request, form_data=payload, user=user)
+        ChatState.update(form_data["chat_id"], title_generated=True, chat_title=chat_title)
+        return chat_title
     except Exception as e:
         log.error('Exception occurred', exc_info=True)
         return JSONResponse(

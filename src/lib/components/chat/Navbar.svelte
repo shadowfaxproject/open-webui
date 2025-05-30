@@ -1,6 +1,9 @@
+
 <script lang="ts">
 	import { getContext } from 'svelte';
 	import { toast } from 'svelte-sonner';
+	import { fade } from 'svelte/transition';
+	import '$lib/styles/pill-button.css'; // Import the shared styles
 
 	import {
 		WEBUI_NAME,
@@ -15,6 +18,8 @@
 		temporaryChatEnabled,
 		user
 	} from '$lib/stores';
+	import { TRIAL_USER_EMAIL, WEBUI_BASE_URL } from '$lib/constants';
+	import { userSignOut } from '$lib/apis/auths';
 
 	import { slide } from 'svelte/transition';
 	import { page } from '$app/stores';
@@ -30,15 +35,13 @@
 	import PencilSquare from '../icons/PencilSquare.svelte';
 	import Banner from '../common/Banner.svelte';
 	import Sidebar from '../icons/Sidebar.svelte';
-
 	import ChatBubbleDotted from '../icons/ChatBubbleDotted.svelte';
 	import ChatBubbleDottedChecked from '../icons/ChatBubbleDottedChecked.svelte';
-
 	import EllipsisHorizontal from '../icons/EllipsisHorizontal.svelte';
 	import ChatPlus from '../icons/ChatPlus.svelte';
 	import ChatCheck from '../icons/ChatCheck.svelte';
-	import Knobs from '../icons/Knobs.svelte';
 	import { WEBUI_API_BASE_URL } from '$lib/constants';
+	import ProfileImage from '$lib/components/chat/Messages/ProfileImage.svelte';
 
 	const i18n = getContext('i18n');
 
@@ -65,21 +68,8 @@
 
 <ShareChatModal bind:show={showShareChatModal} chatId={$chatId} />
 
-<button
-	id="new-chat-button"
-	class="hidden"
-	on:click={() => {
-		initNewChat();
-	}}
-	aria-label="New Chat"
-/>
-
-<nav
-	class="sticky top-0 z-30 w-full {chat?.id
-		? 'pt-0.5 pb-1'
-		: 'pt-1 pb-1'} -mb-12 flex flex-col items-center drag-region"
->
-	<div class="flex items-center w-full pl-1.5 pr-1">
+<nav class="sticky top-0 z-30 w-full py-1.5 -mb-8 flex flex-col items-center drag-region">
+	<div class="flex items-center w-full px-1.5">
 		<div
 			id="navbar-bg-gradient-to-b"
 			class="{chat?.id
@@ -89,22 +79,37 @@
 
 		<div class=" flex max-w-full w-full mx-auto px-1.5 md:px-2 pt-0.5 bg-transparent">
 			<div class="flex items-center w-full max-w-full">
-				{#if $mobile && !$showSidebar}
+				{#if ($user?.email) !== TRIAL_USER_EMAIL}
 					<div
-						class="-translate-x-0.5 mr-1 mt-1 self-start flex flex-none items-center text-gray-600 dark:text-gray-400"
+						class="{$showSidebar
+							? 'md:hidden'
+							: ''} mr-1 self-start flex flex-none items-center text-gray-600 dark:text-gray-400"
 					>
-						<Tooltip content={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}>
-							<button
-								class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition"
-								on:click={() => {
-									showSidebar.set(!$showSidebar);
-								}}
-							>
-								<div class=" self-center p-1.5">
-									<Sidebar />
-								</div>
-							</button>
-						</Tooltip>
+						<button
+							id="sidebar-toggle-button"
+							class="cursor-pointer px-2 py-2 flex rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+							on:click={() => {
+								showSidebar.set(!$showSidebar);
+							}}
+							aria-label="Toggle Sidebar"
+						>
+							<div class=" m-auto self-center">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+									stroke-width="2.5"
+									class="size-3.5"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										d="m8.25 4.5 7.5 7.5-7.5 7.5"
+									/>
+								</svg>
+							</div>
+						</button>
 					</div>
 				{/if}
 
@@ -113,8 +118,43 @@
 			{$showSidebar ? 'ml-1' : ''}
 			"
 				>
-					{#if showModelSelector}
+					{#if showModelSelector && $user?.role === 'admin'}
 						<ModelSelector bind:selectedModels showSetDefault={!shareEnabled} />
+					{/if}
+					{#if ($user?.email) === TRIAL_USER_EMAIL}
+						<div class="flex justify-center items-center text-base w-full text-left font-sans" style="color:#EB5352">
+							<span class="px-1">
+								{#if $mobile}
+									{$i18n.t('Trial experience. For more')}<br>
+								{:else}
+									{$i18n.t('This is a limited version of the App. To experience full capability')}<br>
+								{/if}
+							</span>
+							<button
+								class="pill-button transition w-max font-medium text-base"
+								on:click={async () => {
+									await userSignOut();
+									user.set(null);
+									localStorage.removeItem('token');
+									location.href = '/auth';
+									show = false;
+								}}
+							>
+								{$i18n.t('Sign up')}
+							</button>
+						</div>
+					{:else if (history.messages && Object.keys(history.messages).length > 0)}
+						<div class="flex flex-row justify-center items-center gap-1" in:fade={{ duration: 100 }}>
+							<div class={`shrink-0`}>
+								<ProfileImage
+									src={`${WEBUI_BASE_URL}/static/favicon.png`}
+									className={'size-6'}
+								/>
+							</div>
+							<div class=" text-base @sm:text-base line-clamp-1 font-primary" in:fade={{ duration: 100 }}>
+								{$i18n.t($WEBUI_NAME)}
+							</div>
+						</div>
 					{/if}
 				</div>
 
@@ -218,7 +258,7 @@
 						</Menu>
 					{/if}
 
-					{#if $user?.role === 'admin' || ($user?.permissions.chat?.controls ?? true)}
+					{#if !$mobile && $user?.role === 'admin'}
 						<Tooltip content={$i18n.t('Controls')}>
 							<button
 								class=" flex cursor-pointer px-2 py-2 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-850 transition"
@@ -228,13 +268,30 @@
 								aria-label="Controls"
 							>
 								<div class=" m-auto self-center">
-									<Knobs className=" size-5" strokeWidth="1" />
+									<AdjustmentsHorizontal className=" size-5" strokeWidth="0.5" />
 								</div>
 							</button>
 						</Tooltip>
 					{/if}
 
-					{#if $user !== undefined && $user !== null}
+					<Tooltip content={$i18n.t('New Gift Chat')}>
+						<button
+							id="new-chat-button"
+							class=" flex {$showSidebar
+								? 'md:hidden'
+								: ''} cursor-pointer px-2 py-2 rounded-xl text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-850 transition"
+							on:click={() => {
+								initNewChat();
+							}}
+							aria-label="New Gift Chat"
+						>
+							<div class=" m-auto self-center">
+								<PencilSquare className=" size-5" strokeWidth="2" />
+							</div>
+						</button>
+					</Tooltip>
+
+					{#if $user !== undefined && $user !== null && $user.email !== TRIAL_USER_EMAIL}
 						<UserMenu
 							className="w-[240px]"
 							role={$user?.role}

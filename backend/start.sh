@@ -72,6 +72,15 @@ fi
 PYTHON_CMD=$(command -v python3 || command -v python)
 UVICORN_WORKERS="${UVICORN_WORKERS:-1}"
 
+ENV_FILE="$SCRIPT_DIR/../.env"
+# Read the .env file and set the environment variables
+while IFS='=' read -r key value
+do
+  if [ "$key" == "WEBUI_SSL" ]; then
+    export WEBUI_SSL=$value
+  fi
+done < "$ENV_FILE"
+
 # If script is called with arguments, use them; otherwise use default workers
 if [ "$#" -gt 0 ]; then
     ARGS=("$@")
@@ -79,9 +88,16 @@ else
     ARGS=(--workers "$UVICORN_WORKERS")
 fi
 
-# Run uvicorn
-WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec "$PYTHON_CMD" -m uvicorn open_webui.main:app \
-    --host "$HOST" \
-    --port "$PORT" \
-    --forwarded-allow-ips "${FORWARDED_ALLOW_IPS:-*}" \
+if [[ "${WEBUI_SSL}" == "true" ]]; then
+  echo "Starting Open WebUI with SSL"
+  WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec "$PYTHON_CMD" -m uvicorn open_webui.main:app \
+    --host "$HOST" --port "$PORT" --forwarded-allow-ips "${FORWARDED_ALLOW_IPS:-*}" \
+    --ssl-certfile='/etc/nginx/ssl/magicboxgifts.com.crt' \
+    --ssl-keyfile='/etc/nginx/ssl/magicboxgifts.com.key' \
     "${ARGS[@]}"
+else
+  echo "Starting Open WebUI without SSL"
+  WEBUI_SECRET_KEY="$WEBUI_SECRET_KEY" exec "$PYTHON_CMD" -m uvicorn open_webui.main:app \
+    --host "$HOST" --port "$PORT" --forwarded-allow-ips "${FORWARDED_ALLOW_IPS:-*}" \
+    "${ARGS[@]}"
+fi
