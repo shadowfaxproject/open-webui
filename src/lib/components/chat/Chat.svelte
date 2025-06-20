@@ -104,6 +104,7 @@
 	import EventConfirmDialog from '../common/ConfirmDialog.svelte';
 	import DeleteConfirmDialog from '../common/ConfirmDialog.svelte';
 	import Placeholder from './Placeholder.svelte';
+	import PlaceholderMB from './PlaceholderMB.svelte';
 	import FilesOverlay from './MessageInput/FilesOverlay.svelte';
 	import NotificationToast from '../NotificationToast.svelte';
 	import Spinner from '../common/Spinner.svelte';
@@ -3201,8 +3202,8 @@
 								</div>
 							</div>
 						{:else}
-							<div class="flex items-center h-full">
-								<Placeholder
+							<div class=" pb-2.5 flex flex-col justify-between w-full flex-auto overflow-auto h-0 max-w-full z-10 scrollbar-hidden">
+								<PlaceholderMB
 									{history}
 									{selectedModels}
 									bind:messageInput

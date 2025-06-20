@@ -211,55 +211,13 @@
 		return {header_message: header_message, footer_message: footer_message};
 	};
 
-	interface Product {
-    product_info: {
-			name: string;
-			display_name: string;
-			description: string;
-			notes: string;
-			price: string;
-			made_by: string;
-			url_id: string;
-			url: string;
-			image_url: string;
-			image_urls: string;
-    };
-    product_tags: {
-			generic_name: string;
-			category: string;
-			age_group: string;
-			gender: string;
-			url_id: string;
-			url: string;
-    };
-    search_score: number;
-    reranker_score: number;
-    thumbnails: string[];
-		experience_info: {
-			name: string;
-			display_name: string;
-			description: string;
-			price: string;
-			rating: string;
-			city: string;
-			state: string;
-			country: string;
-			zipcode: string;
-			phone: string;
-			url: string;
-			image_url: string;
-			image_urls: string;
-		};
-	}
-
-	const parseProductListFromMessage = (message: string): Product[] => {
+	const parseGiftIdeaIdFromMessage = (message: string): {id: string} => {
 		const parsedMessage = JSON.parse(message);
-		const productList: Product[] = JSON.parse(parsedMessage.product_list);
-		return productList;
+		const product_list = parsedMessage.product_list;
+		return { id: (product_list.match(/GiftIdea Id ([a-z0-9]+)/) || [])[1] || '' };
 	};
 
 	const updateMessage = async (message: MessageType, title: string) => {
-	    console.log('updateMessage', message, title);
 		const parsedMessage = JSON.parse(message.content);
 		// find option that has the same title as the one passed in and update its state = selected. For everything else, set state = disabled
 		const updatedOptions = parsedMessage.options.map((option: { title: string; description: string, state: string }) => {
@@ -974,16 +932,16 @@
 									}}
 								/>
 							{:else if message.content && message.error !== true && message.content.includes("\"product_list\":")}
-								<ProductGrid products={parseProductListFromMessage(message.content)}
+								<ProductGrid chat_id={chatId} gift_idea_id={parseGiftIdeaIdFromMessage(message.content)}
 									on:click={(e) => { console.log(e); }}
 								/>
 								<br>
 								{#if message.content.includes("\"options\":")}
+
 									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
-										on:click={(e) => {
-											const selectedOption = e.detail;
-											updateMessage(message, selectedOption.title);
-											submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
+										on:click={(e) => {const selectedOption = e.detail;
+										updateMessage(message, selectedOption.title);
+										submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
 										}}
 									/>
 								{/if}

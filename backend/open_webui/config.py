@@ -1037,6 +1037,26 @@ UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 CACHE_DIR = DATA_DIR / 'cache'
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
+####################################
+# Image Cache DIR
+####################################
+
+IMAGE_CACHE_DIR = DATA_DIR / "image_cache"
+IMAGE_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+####################################
+# gift_requests DIR
+####################################
+
+GIFT_REQUESTS_DIR = DATA_DIR / "gift_requests"
+GIFT_REQUESTS_DIR.mkdir(parents=True, exist_ok=True)
+
+####################################
+# user activity logs DIR
+####################################
+
+USER_ACTIVITY_LOG_DIR = DATA_DIR / "activity_logs"
+USER_ACTIVITY_LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 ####################################
 # DIRECT CONNECTIONS

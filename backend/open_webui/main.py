@@ -373,6 +373,8 @@ from open_webui.config import (
     ENABLE_WEB_LOADER_SSL_VERIFICATION,
     ENABLE_GOOGLE_DRIVE_INTEGRATION,
     UPLOAD_DIR,
+    GIFT_REQUESTS_DIR,
+    USER_ACTIVITY_LOG_DIR,
     EXTERNAL_WEB_SEARCH_URL,
     EXTERNAL_WEB_SEARCH_API_KEY,
     EXTERNAL_WEB_LOADER_URL,
@@ -454,6 +456,7 @@ from open_webui.config import (
     # Misc
     ENV,
     CACHE_DIR,
+    IMAGE_CACHE_DIR,
     STATIC_DIR,
     FRONTEND_BUILD_DIR,
     CORS_ALLOW_ORIGIN,
@@ -2910,6 +2913,7 @@ async def healthcheck_with_db():
 
 
 app.mount('/static', StaticFiles(directory=STATIC_DIR), name='static')
+app.mount("/image_cache", StaticFiles(directory=IMAGE_CACHE_DIR), name="image_cache")
 
 
 @app.get('/cache/{path:path}')
@@ -2931,6 +2935,31 @@ async def serve_cache_file(
         headers['Content-Disposition'] = f'attachment; filename="{os.path.basename(file_path)}"'
     return FileResponse(file_path, headers=headers)
 
+@app.get("/api/gift_requests/{chat_id}")
+async def get_gift_request_file(chat_id: str):
+    file_path = os.path.join(GIFT_REQUESTS_DIR, chat_id + ".json")
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="File not found")
+    return FileResponse(file_path)
+
+@app.post("/api/log")
+async def log_message(form_data: dict):
+    message = form_data.get("log_message")
+    if not message:
+        raise HTTPException(status_code=400, detail="Missing log_message")
+    log.info(message)
+    return {"status": "logged"}
+
+@app.post("/api/log_activity")
+async def log_message_to_file(form_data: dict):
+    message = form_data.get("log_message")
+    user_id = form_data.get("user_id")
+    if not message:
+        raise HTTPException(status_code=400, detail="Missing log_message")
+    log_file_path = os.path.join(USER_ACTIVITY_LOG_DIR, f"{user_id}.log")
+    with open(log_file_path, "a", encoding="utf-8") as f:
+        f.write(message + "\n")
+    return {"status": "logged"}
 
 def swagger_ui_html(*args, **kwargs):
     return get_swagger_ui_html(
