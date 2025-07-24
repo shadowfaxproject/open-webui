@@ -5,6 +5,7 @@
     import {mobile, user } from '$lib/stores';
    	import { WEBUI_BASE_URL } from '$lib/constants';
     import { logActivity } from '$lib/utils/log-activity';
+    import ProductDetailsModal from '$lib/components/common/ProductDetailsModal.svelte';
 
     const dispatch = createEventDispatcher();
 
@@ -132,30 +133,10 @@
 </script>
 
 {#if showProductDetailsModal}
-    <div class="modal" role="dialog" tabindex="0" aria-modal="true" on:click={() => handleCloseClick(productSelected)} on:keydown={(e) => e.key === 'Escape' && handleCloseClick(productSelected)} >
-        <div class="relative items-center justify-center h-[400px] w-[400px] border-1 rounded-lg bg-white"
-            on:click|stopPropagation tabindex="0" role="document" on:keydown={(e) => e.key === 'Escape' && handleCloseClick(productSelected)}>
-            <button class="close-button px-1 py-1 rounded-sm bg-gray-50 border-gray-50 text-gray-700 shadow-md z-10" on:click={() => handleCloseClick(productSelected)} >
-              <div class=" m-auto self-center">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    stroke-width="2.5"
-                    class="size-3.5"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 6l12 12M6 18L18 6"
-                    />
-                </svg>
-              </div>
-            </button>
-            <Carousel imageUrls={productSelected.thumbnails} showArrows={true} duration={3000} />
-        </div>
-    </div>
+    <ProductDetailsModal
+        product={productSelected}
+        on:close={handleCloseClick}
+    />
 {/if}
 
 <div class="product-grid-container">
@@ -220,27 +201,6 @@
 </div>
 
 <style>
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.8);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .close-button {
-      position:absolute;
-      display: flex;
-      cursor: pointer;
-      top: 0;
-      right: 0;
-    }
-
     .product-grid-container {
         display: flex;
         flex-direction: column;
@@ -251,6 +211,12 @@
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 0rem;
+    }
+
+    @media (max-width: 640px) {
+        .product-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
     }
 
     .grid-item {
