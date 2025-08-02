@@ -347,6 +347,7 @@ from open_webui.config import (
     # Misc
     ENV,
     CACHE_DIR,
+    IMAGE_CACHE_DIR,
     STATIC_DIR,
     FRONTEND_BUILD_DIR,
     CORS_ALLOW_ORIGIN,
@@ -1638,6 +1639,7 @@ async def healthcheck_with_db():
 
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 app.mount("/cache", StaticFiles(directory=CACHE_DIR), name="cache")
+app.mount("/image_cache", StaticFiles(directory=IMAGE_CACHE_DIR), name="image_cache")
 
 @app.get("/api/gift_requests/{chat_id}")
 async def get_gift_request_file(chat_id: str):

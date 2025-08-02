@@ -751,6 +751,13 @@ CACHE_DIR = DATA_DIR / "cache"
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
 ####################################
+# Image Cache DIR
+####################################
+
+IMAGE_CACHE_DIR = DATA_DIR / "image_cache"
+IMAGE_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
+####################################
 # gift_requests DIR
 ####################################
 
