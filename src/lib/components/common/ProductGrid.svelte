@@ -152,32 +152,24 @@
 
     <div class="product-grid">
         {#each products as product}
-            <div class="grid-item dark:bg-gray-800 dark:text-gray-200 dark:shadow-gray-400 bg-gray-100 text-gray-800 shadow-md rounded-lg">
-                {#if !$mobile}
-                  <button class="grid-item-image relative items-center justify-center bg-white"
-                  on:click={() => handleViewDetailsClick(product)}>
-                    <Carousel imageUrls={product.thumbnails} showArrows={false} />
-                  </button>
-                {:else}
-                  <button class="grid-item-image-mobile relative items-center justify-center bg-white"
-                  on:click={() => handleViewDetailsClick(product)}>
-                    <Carousel imageUrls={product.thumbnails} showArrows={false} />
-                  </button>
-                {/if}
+            <div class={`grid-item ${$mobile ? 'grid-item-mobile' : ''} dark:bg-gray-800 dark:text-gray-200 dark:shadow-gray-400 bg-gray-100 text-gray-800 shadow-md rounded-lg`}>
+                <button class="{$mobile ? 'grid-item-image-mobile' : 'grid-item-image'} relative items-center justify-center bg-white"
+                on:click={() => handleViewDetailsClick(product)}>
+                <Carousel imageUrls={product.thumbnails} showArrows={false} />
+                </button>
 
                 <!-- Display name -->
                 {#if product.product_info}
-                    <h3 class="grid-item-name">{product.product_info.display_name}</h3>
-                    <p class="grid-item-price">{product.product_info.price ?? ''}</p>
+                    <h3 class={$mobile ? 'grid-item-name-mobile' : 'grid-item-name'}>{product.product_info.display_name}</h3>
+                    <p class={$mobile ? 'grid-item-price-mobile' : 'grid-item-price'}>{product.product_info.price ?? ''}</p>
                 {:else if product.experience_info}
-                    <h3 class="grid-item-name">{product.experience_info.display_name}</h3>
-                    <p class="grid-item-location">
+                    <h3 class={$mobile ? 'grid-item-name-mobile' : 'grid-item-name'}>{product.experience_info.display_name}</h3>
+                    <p class={$mobile ? 'grid-item-location-mobile' : 'grid-item-location'}>
                         {product.experience_info.city ?? ''}{product.experience_info.city && product.experience_info.state ? ', ' : ''}{product.experience_info.state ?? ''}
                         <br>
                         {product.experience_info.price ?? ''}
                     </p>
                 {/if}
-
 
                 <!-- Buy now button -->
                 <div class="grid-item-footer w-full flex justify-center py-1">
@@ -216,6 +208,59 @@
     @media (max-width: 640px) {
         .product-grid {
             grid-template-columns: repeat(2, 1fr);
+            gap: 0.5rem; /* Adjust gap for mobile */
+            border-radius: 1.5rem;
+        }
+
+        .grid-item-mobile {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .grid-item-image-mobile {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            margin: 0; /* Remove any margin */
+            border-radius: 0; /* Remove rounded corners */
+        }
+
+        .grid-item-name-mobile {
+            font-size: 0.8rem;
+            align-self: left;
+            font-weight: bold;
+            margin: 0.25rem 0 0.1rem 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2em; /* Adjust line height to match the text spacing */
+        }
+
+        .grid-item-price-mobile {
+            font-size: 0.6rem;
+            align-self: left;
+            font-weight: lighter;
+            margin: 0rem 0 0.1rem 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2em; /* Adjust line height to match the text spacing */
+        }
+
+        .grid-item-location-mobile {
+            font-size: 0.7rem;
+            align-self: left;
+            font-weight: normal;
+            margin: 0rem 0 0.1rem 1rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2em; /* Adjust line height to match the text spacing */
+        }
+
+        .pill-button {
+            font-size: 0.85rem;
+            padding: 0 0.75rem;
         }
     }
 
@@ -236,14 +281,6 @@
     .grid-item-image {
         width: 100%;
         height: 200px;
-        object-fit: cover;
-        margin: 0; /* Remove any margin */
-        border-radius: 0; /* Remove rounded corners */
-    }
-
-    .grid-item-image-mobile {
-        width: 100%;
-        height: 360px;
         object-fit: cover;
         margin: 0; /* Remove any margin */
         border-radius: 0; /* Remove rounded corners */
@@ -273,7 +310,7 @@
         font-size: 0.85rem;
         align-self: left;
         font-weight: normal;
-        margin: 0.5rem 0 0.5rem 1rem;
+        margin: 0rem 0 0.1rem 1rem;
         overflow: hidden;
         text-overflow: ellipsis;
         line-height: 1.2em; /* Adjust line height to match the text spacing */
