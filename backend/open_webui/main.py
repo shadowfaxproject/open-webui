@@ -295,6 +295,7 @@ from open_webui.config import (
     # WebUI
     WEBUI_AUTH,
     WEBUI_NAME,
+    WEBUI_SOCKET_URL,
     WEBUI_TAGLINE,
     WEBUI_BANNERS,
     WEBHOOK_URL,
@@ -519,6 +520,7 @@ app.state.config = AppConfig(
 
 app.state.WEBUI_NAME = WEBUI_NAME
 app.state.WEBUI_TAGLINE = WEBUI_TAGLINE
+app.state.WEBUI_SOCKET_URL = WEBUI_SOCKET_URL
 app.state.LICENSE_METADATA = None
 
 
@@ -1406,6 +1408,7 @@ async def get_app_config(request: Request):
         "status": True,
         "name": app.state.WEBUI_NAME,
         "tagline": app.state.WEBUI_TAGLINE,
+        "webui_socket_url": app.state.WEBUI_SOCKET_URL,
         "version": VERSION,
         "default_locale": str(DEFAULT_LOCALE),
         "oauth": {

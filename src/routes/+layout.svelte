@@ -27,7 +27,9 @@
 		isApp,
 		appInfo,
 		toolServers,
-		playingNotificationSound
+		playingNotificationSound,
+		WEBUI_TAGLINE,
+		WEBUI_SOCKET_URL,
 	} from '$lib/stores';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
@@ -69,6 +71,8 @@
 	const BREAKPOINT = 768;
 
 	const setupSocket = async (enableWebsocket) => {
+		console.log($WEBUI_SOCKET_URL, $WEBUI_TAGLINE, $WEBUI_NAME)
+		WEBUI_BASE_URL = $WEBUI_SOCKET_URL || $WEBUI_BASE_URL || `https://${WEBUI_HOSTNAME}:8080`;
 		const _socket = io(`${WEBUI_BASE_URL}` || undefined, {
 			reconnection: true,
 			reconnectionDelay: 1000,
@@ -583,6 +587,8 @@
 			// Save Backend Status to Store
 			await config.set(backendConfig);
 			await WEBUI_NAME.set(backendConfig.name);
+			await WEBUI_TAGLINE.set(backendConfig.tagline);
+			await WEBUI_SOCKET_URL.set(backendConfig.webui_socket_url);
 
 			if ($config) {
 				await setupSocket($config.features?.enable_websocket ?? true);

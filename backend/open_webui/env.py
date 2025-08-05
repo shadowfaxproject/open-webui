@@ -107,6 +107,7 @@ log.setLevel(SRC_LOG_LEVELS["CONFIG"])
 
 WEBUI_NAME = os.environ.get("WEBUI_NAME", "Open WebUI")
 WEBUI_TAGLINE = os.environ.get("WEBUI_TAGLINE", "The Open Source WebUI for LLMs")
+WEBUI_SOCKET_URL = os.environ.get("WEBUI_SOCKET_URL", "")
 
 WEBUI_FAVICON_URL = "/static/favicon.png"
 
