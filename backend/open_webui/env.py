@@ -130,6 +130,7 @@ SRC_LOG_LEVELS = {}  # Legacy variable, do not remove
 WEBUI_NAME = os.environ.get('WEBUI_NAME', 'Open WebUI')
 if WEBUI_NAME != 'Open WebUI':
     WEBUI_NAME += ' (Open WebUI)'
+WEBUI_SOCKET_URL = os.environ.get("WEBUI_SOCKET_URL", "")
 
 WEBUI_FAVICON_URL = "/static/favicon.png"
 WEBUI_TAGLINE = os.environ.get("WEBUI_TAGLINE", "The Open Source WebUI for LLMs")

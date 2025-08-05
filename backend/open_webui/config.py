@@ -35,6 +35,7 @@ from open_webui.env import (
     WEBUI_FAVICON_URL,
     WEBUI_NAME,
     WEBUI_TAGLINE,
+    WEBUI_SOCKET_URL,
     log,
 )
 from open_webui.internal.db import Base, get_db, get_async_db

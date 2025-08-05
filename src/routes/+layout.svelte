@@ -37,7 +37,9 @@
 		showFileNavPath,
 		showFileNavDir,
 		pyodideWorker,
-		desktopEvent
+		desktopEvent,
+		WEBUI_TAGLINE,
+		WEBUI_SOCKET_URL,
 	} from '$lib/stores';
 	import { getFileContentById } from '$lib/apis/files';
 	import { goto } from '$app/navigation';
@@ -114,7 +116,7 @@
 	const BREAKPOINT = 768;
 
 	const setupSocket = async (enableWebsocket) => {
-		const _socket = io(`${WEBUI_BASE_URL}` || undefined, {
+		const _socket = io(WEBUI_SOCKET_URL && $WEBUI_SOCKET_URL !== '' ? $WEBUI_SOCKET_URL : `${WEBUI_BASE_URL}`, {
 			reconnection: true,
 			reconnectionDelay: 1000,
 			reconnectionDelayMax: 5000,
@@ -1026,6 +1028,8 @@
 			// Save Backend Status to Store
 			await config.set(backendConfig);
 			await WEBUI_NAME.set(backendConfig.name);
+			await WEBUI_TAGLINE.set(backendConfig.tagline);
+			await WEBUI_SOCKET_URL.set(backendConfig.webui_socket_url);
 
 			if ($config) {
 				await setupSocket($config.features?.enable_websocket ?? true);

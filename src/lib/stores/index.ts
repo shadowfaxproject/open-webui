@@ -12,9 +12,11 @@ import emojiShortCodes from '$lib/emoji-shortcodes.json';
 // Backend
 export const WEBUI_NAME = writable(APP_NAME);
 export const WEBUI_TAGLINE = writable('Perfect Gifts At Your Fingertips');
+export const WEBUI_SOCKET_URL = writable(undefined);
 
 export const WEBUI_VERSION = writable(null);
 export const WEBUI_DEPLOYMENT_ID = writable(null);
+
 
 export const config: Writable<Config | undefined> = writable(undefined);
 export const user: Writable<SessionUser | undefined> = writable(undefined);

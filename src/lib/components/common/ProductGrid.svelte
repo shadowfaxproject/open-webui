@@ -155,7 +155,7 @@
             <div class={`grid-item ${$mobile ? 'grid-item-mobile' : ''} dark:bg-gray-800 dark:text-gray-200 dark:shadow-gray-400 bg-gray-100 text-gray-800 shadow-md rounded-lg`}>
                 <button class="{$mobile ? 'grid-item-image-mobile' : 'grid-item-image'} relative items-center justify-center bg-white"
                 on:click={() => handleViewDetailsClick(product)}>
-                <Carousel imageUrls={product.thumbnails} showArrows={false} />
+                <Carousel imageUrls={product.thumbnails} showArrows={false} merchantName={product?.merchant_name}/>
                 </button>
 
                 <!-- Display name -->
@@ -256,11 +256,6 @@
             overflow: hidden;
             text-overflow: ellipsis;
             line-height: 1.2em; /* Adjust line height to match the text spacing */
-        }
-
-        .pill-button {
-            font-size: 0.85rem;
-            padding: 0 0.75rem;
         }
     }
 

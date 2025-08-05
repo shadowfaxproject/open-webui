@@ -47,7 +47,7 @@
                 </svg>
             </div>
         </button>
-        <Carousel imageUrls={product?.thumbnails} showArrows={true} duration={3000} />
+        <Carousel imageUrls={product?.thumbnails} showArrows={true} duration={3000} merchantName={product?.merchant_name}/>
     </div>
 </div>
 
@@ -69,6 +69,6 @@
         display: flex;
         cursor: pointer;
         top: 0;
-        right: 0;
+        left: 0;
     }
 </style>

@@ -206,6 +206,7 @@
 	onMount(() => {
 		rotateMessages();
 	});
+
 </script>
 
 <svelte:head>
@@ -560,7 +561,7 @@
 						</div>
 					</div>
 				{/if}
-				<div class="flex justify-center items-center text-xs w-full text-center font-light font-sans text-gray-700 dark:text-gray-100">
+				<div class="flex justify-center items-center { $mobile ? 'text-xs' : 'text' } w-full text-center font-light font-sans text-gray-700 dark:text-gray-100">
 					<span >
 						© 2025 magicbox®. All Rights Reserved.
 						<a href="/terms.html" target="_blank">
