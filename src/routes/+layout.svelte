@@ -71,9 +71,7 @@
 	const BREAKPOINT = 768;
 
 	const setupSocket = async (enableWebsocket) => {
-		console.log($WEBUI_SOCKET_URL, $WEBUI_TAGLINE, $WEBUI_NAME)
-		WEBUI_BASE_URL = $WEBUI_SOCKET_URL || $WEBUI_BASE_URL || `https://${WEBUI_HOSTNAME}:8080`;
-		const _socket = io(`${WEBUI_BASE_URL}` || undefined, {
+		const _socket = io(WEBUI_SOCKET_URL && $WEBUI_SOCKET_URL !== '' ? `${WEBUI_SOCKET_URL}` : `${WEBUI_BASE_URL}`, {
 			reconnection: true,
 			reconnectionDelay: 1000,
 			reconnectionDelayMax: 5000,
