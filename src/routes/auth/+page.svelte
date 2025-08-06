@@ -530,7 +530,7 @@
 						</div>
 					</div>
 				{/if}
-				<div class="flex justify-center items-center text-sm w-full text-left font-light font-sans text-gray-300">
+				<div class="flex justify-center items-center text-sm w-full text-left font-light font-sans text-gray-500 dark:text-gray-300">
 					<span >
 						© 2025 magicbox®. All Rights Reserved.
 						<a href="/terms.html" target="_blank">
@@ -539,7 +539,7 @@
 						<a href="/privacy.html" target="_blank">
 						<span>{$i18n.t('Privacy')}</span>
 						</a><br>
-						We participate in Amazon Associate program. When you buy from amazon links, We earn a small commission — at no extra cost to you. <a href="/affiliate-disclosure.html" target="_blank">
+						We participate in Amazon Associate program. When you buy from amazon links, we earn a small commission — at no extra cost to you. <a href="/affiliate-disclosure.html" target="_blank">
 						<span>{$i18n.t('(Learn More)')}</span>
 						</a>
 					</span>
