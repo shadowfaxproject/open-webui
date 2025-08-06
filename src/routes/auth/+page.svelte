@@ -524,28 +524,26 @@
 						</div>
 						<br>
 						<div class="flex justify-center items-center text w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
-							<span in:fade={{ duration: 600 }} out:fade={{ duration: 400 }}>
+							<span>
 								{$i18n.t(messages[currentIndex])}
 							</span>
 						</div>
 					</div>
 				{/if}
-				<button
- 					class="flex justify-center items-center text-xs w-full text-center underline"
- 					on:click={() => {
- 						window.open(`https://magicboxgifts.com/terms.html`, '_blank');
- 					}}
- 				>
- 					<span>{$i18n.t('Terms')}</span>
- 				</button>
- 				<button
- 					class="flex justify-center items-center text-xs w-full text-center underline"
- 					on:click={() => {
- 						window.open(`https://magicboxgifts.com/privacy.html`, '_blank');
- 					}}
- 				>
- 					<span>{$i18n.t('Privacy')}</span>
- 				</button>
+				<div class="flex justify-center items-center text-sm w-full text-left font-light font-sans text-gray-300">
+					<span >
+						© 2025 magicbox®. All Rights Reserved.
+						<a href="/terms.html" target="_blank">
+						<span>{$i18n.t('Terms')}</span>
+						</a>|
+						<a href="/privacy.html" target="_blank">
+						<span>{$i18n.t('Privacy')}</span>
+						</a><br>
+						We participate in Amazon Associate program. When you buy from amazon links, We earn a small commission — at no extra cost to you. <a href="/affiliate-disclosure.html" target="_blank">
+						<span>{$i18n.t('(Learn More)')}</span>
+						</a>
+					</span>
+				</div>
 			</div>
 		</div>
 	{/if}
