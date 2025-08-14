@@ -11,6 +11,7 @@
   ];
   export let duration = 5000;
   export let showArrows = true;
+  export let merchantName = null;
   let selectedImageIdx = 0;
 
   onMount(() => {
@@ -30,6 +31,15 @@
   function prevImage() {
     selectedImageIdx = (selectedImageIdx - 1 + imageUrls.length) % imageUrls.length;
   }
+
+  export let logoExists = false;
+  $: {
+    if (merchantName) {
+      fetch(`/static/affiliate_logos/${merchantName}.png`, { method: 'HEAD' })
+        .then(res => logoExists = res.ok)
+        .catch(() => logoExists = false);
+    }
+  }
 </script>
 
 <div class="carousel-container">
@@ -39,6 +49,15 @@
     style="opacity: {selectedImageIdx === idx ? 1 : 0}; background-image: url('{imageUrl}')"
    ></div>
   {/each}
+
+  <!-- Overlay an logo.png on right-top corner. If merchant-name is not empty or not null-->
+  {#if merchantName}
+    {#if logoExists}
+      <div class="absolute top-0 right-0 p-4">
+        <img src="/static/affiliate_logos/{merchantName}.png" alt="Logo" class="h-6 w-6 rounded-full border-1 border-gray-400 absolute top-1 right-1 z-20 bg-gray-100" />
+      </div>
+    {/if}
+  {/if}
 
   {#if showArrows && imageUrls.length > 1}
     <!-- Left button -->
