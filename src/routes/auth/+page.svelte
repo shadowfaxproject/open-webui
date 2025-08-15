@@ -9,7 +9,7 @@
 	import { ldapUserSignIn, getSessionUser, userSignIn, userSignUp } from '$lib/apis/auths';
 
 	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL, TRIAL_USER_EMAIL, TRIAL_USER_PASSWORD } from '$lib/constants';
-	import { WEBUI_NAME, WEBUI_TAGLINE, config, user, socket } from '$lib/stores';
+	import { WEBUI_NAME, WEBUI_TAGLINE, config, user, socket, mobile } from '$lib/stores';
 
 	import { generateInitialsImage, canvasPixelTest } from '$lib/utils';
 
@@ -523,14 +523,14 @@
 							{/each}
 						</div>
 						<br>
-						<div class="flex justify-center items-center text w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
+						<div class="flex justify-center items-center { $mobile ? 'text-sm' : 'text' } w-full text-left font-light font-sans" style="color: rgb(235, 83, 82)">
 							<span>
 								{$i18n.t(messages[currentIndex])}
 							</span>
 						</div>
 					</div>
 				{/if}
-				<div class="flex justify-center items-center text-sm w-full text-left font-light font-sans text-gray-500 dark:text-gray-300">
+				<div class="flex justify-center items-center { $mobile ? 'text-xs' : 'text-sm' } w-full text-center font-light font-sans text-gray-500 dark:text-gray-300">
 					<span >
 						© 2025 magicbox®. All Rights Reserved.
 						<a href="/terms.html" target="_blank">
