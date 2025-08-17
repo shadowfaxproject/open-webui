@@ -530,7 +530,7 @@
 						</div>
 					</div>
 				{/if}
-				<div class="flex justify-center items-center { $mobile ? 'text-xs' : 'text-sm' } w-full text-center font-light font-sans text-gray-500 dark:text-gray-300">
+				<div class="flex justify-center items-center { $mobile ? 'text-xs' : 'text' } w-full text-center font-light font-sans text-gray-700 dark:text-gray-100">
 					<span >
 						© 2025 magicbox®. All Rights Reserved.
 						<a href="/terms.html" target="_blank">
