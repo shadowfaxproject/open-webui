@@ -155,7 +155,8 @@
 					{$i18n.t('Great gift suggestions for all occasions!!!')}
 					<br />
 					<div class=" text-sm @sm:text-3xl line-clamp-1 text-gray-500" in:fade={{ duration: 100 }}>
-						{$i18n.t('*Some product links might be affiliate links.')}
+						{$i18n.t('*Some product links might be amazon-affiliate links.')}
+						<a href="/affiliate-disclosure.html" target="_blank"><span>{$i18n.t('(Learn More)')}</span></a>
 					</div>
 				</div>
 			</div>
