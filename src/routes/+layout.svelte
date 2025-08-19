@@ -907,6 +907,13 @@
 			}
 		}
 
+		const isLocalSample = window.location.pathname === '/gifts';
+
+		if (isLocalSample) {
+			// Directly load the sample page component
+			await goto(`/gifts`);
+		}
+
 		if (window?.electronAPI) {
 			const info = await window.electronAPI.send({
 				type: 'app:info'
@@ -1068,14 +1075,15 @@
 								.catch(() => {});
 						}
 					} else {
-						// Redirect Invalid Session User to /auth Page
-						localStorage.removeItem('token');
-						await goto(`/auth?redirect=${encodedUrl}`);
+						// Redirect Invalid Session User to /auth Page, but skip for /sample
+						if ($page.url.pathname !== '/gifts') {
+							localStorage.removeItem('token');
+							await goto(`/auth?redirect=${encodedUrl}`);
+						}
 					}
 				} else {
-					// Don't redirect if we're already on the auth page
-					// Needed because we pass in tokens from OAuth logins via URL fragments
-					if ($page.url.pathname !== '/auth') {
+					// Don't redirect if we're already on the auth page or /gifts
+					if ($page.url.pathname !== '/auth' && $page.url.pathname !== '/gifts') {
 						await goto(`/auth?redirect=${encodedUrl}`);
 					}
 				}
