@@ -54,7 +54,7 @@
   {#if merchantName}
     {#if logoExists}
       <div class="absolute top-0 right-0 p-4">
-        <img src="/static/affiliate_logos/{merchantName}.png" title="Amazon Affiliate" alt="Logo" class="h-8 w-8 rounded-full border-1 border-gray-400 absolute top-1 right-1 z-20 bg-gray-100" />
+        <img src="/static/affiliate_logos/{merchantName}.png" title="Amazon Affiliate" alt="Logo" class="h-6 w-6 rounded-full border-1 border-gray-400 absolute top-1 right-1 z-20 bg-gray-100" />
       </div>
     {/if}
   {/if}
