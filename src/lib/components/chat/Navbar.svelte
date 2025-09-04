@@ -67,7 +67,7 @@
 	on:click={() => {
 		initNewChat();
 	}}
-	aria-label="New Chat"
+	aria-label="New Gift Chat"
 />
 
 <nav class="sticky top-0 z-30 w-full py-1 -mb-8 flex flex-col items-center drag-region">
@@ -200,7 +200,7 @@
 					{/if}
 
 					{#if $mobile}
-						<Tooltip content={$i18n.t('New Chat')}>
+						<Tooltip content={$i18n.t('New Gift Chat')}>
 							<button
 								class=" flex {$showSidebar
 									? 'md:hidden'
@@ -208,7 +208,7 @@
 								on:click={() => {
 									initNewChat();
 								}}
-								aria-label="New Chat"
+								aria-label="New Gift Chat"
 							>
 								<div class=" m-auto self-center">
 									<PencilSquare className=" size-5" strokeWidth="2" />

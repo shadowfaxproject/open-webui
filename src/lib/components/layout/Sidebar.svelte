@@ -549,7 +549,7 @@
 
 			<div>
 				<div class="">
-					<Tooltip content={$i18n.t('New Chat')} placement="right">
+					<Tooltip content={$i18n.t('New Gift Chat')} placement="right">
 						<a
 							class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition group"
 							href="/"
@@ -561,7 +561,7 @@
 								goto('/');
 								newChatHandler();
 							}}
-							aria-label={$i18n.t('New Chat')}
+							aria-label={$i18n.t('New Gift Chat')}
 						>
 							<div class=" self-center flex items-center justify-center size-9">
 								<PencilSquare className="size-4.5" />
@@ -753,14 +753,14 @@
 						href="/"
 						draggable="false"
 						on:click={newChatHandler}
-						aria-label={$i18n.t('New Chat')}
+						aria-label={$i18n.t('New Gift Chat')}
 					>
 						<div class="self-center">
 							<PencilSquare className=" size-4.5" strokeWidth="2" />
 						</div>
 
 						<div class="flex self-center translate-y-[0.5px]">
-							<div class=" self-center text-sm font-primary">{$i18n.t('New Chat')}</div>
+							<div class=" self-center text-sm font-primary">{$i18n.t('New Gift Chat')}</div>
 						</div>
 					</a>
 				</div>
