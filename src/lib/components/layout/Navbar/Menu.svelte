@@ -323,33 +323,35 @@
 				</DropdownMenu.Item>
 			{/if}
 
-			<DropdownMenu.Item
-				class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
-				id="chat-overview-button"
-				on:click={async () => {
-					await showControls.set(true);
-					await showOverview.set(true);
-					await showArtifacts.set(false);
-				}}
-			>
-				<Map className=" size-4" strokeWidth="1.5" />
-				<div class="flex items-center">{$i18n.t('Overview')}</div>
-			</DropdownMenu.Item>
+			{#if $user?.role === 'admin'}
+				<DropdownMenu.Item
+					class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
+					id="chat-overview-button"
+					on:click={async () => {
+						await showControls.set(true);
+						await showOverview.set(true);
+						await showArtifacts.set(false);
+					}}
+				>
+					<Map className=" size-4" strokeWidth="1.5" />
+					<div class="flex items-center">{$i18n.t('Overview')}</div>
+				</DropdownMenu.Item>
 
-			<DropdownMenu.Item
-				class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
-				id="chat-overview-button"
-				on:click={async () => {
-					await showControls.set(true);
-					await showArtifacts.set(true);
-					await showOverview.set(false);
-				}}
-			>
-				<Cube className=" size-4" strokeWidth="1.5" />
-				<div class="flex items-center">{$i18n.t('Artifacts')}</div>
-			</DropdownMenu.Item>
+				<DropdownMenu.Item
+					class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
+					id="chat-overview-button"
+					on:click={async () => {
+						await showControls.set(true);
+						await showArtifacts.set(true);
+						await showOverview.set(false);
+					}}
+				>
+					<Cube className=" size-4" strokeWidth="1.5" />
+					<div class="flex items-center">{$i18n.t('Artifacts')}</div>
+				</DropdownMenu.Item>
 
-			<hr class="border-gray-100 dark:border-gray-800 my-1" />
+				<hr class="border-gray-100 dark:border-gray-800 my-1" />
+			{/if}
 
 			{#if !$temporaryChatEnabled && ($user?.role === 'admin' || ($user.permissions?.chat?.share ?? true))}
 				<DropdownMenu.Item
@@ -364,7 +366,7 @@
 				</DropdownMenu.Item>
 			{/if}
 
-			{#if chat?.id}
+			{#if chat?.id && $user?.role === 'admin'}
 				<DropdownMenu.Sub>
 					<DropdownMenu.SubTrigger
 						class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
@@ -392,90 +394,91 @@
 						{/each}
 					</DropdownMenu.SubContent>
 				</DropdownMenu.Sub>
-			{/if}
 
-			<DropdownMenu.Item
-				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md"
-				on:click={() => {
-					archiveChatHandler();
-				}}
-			>
-				<ArchiveBox className="size-4" strokeWidth="2" />
-				<div class="flex items-center">{$i18n.t('Archive')}</div>
-			</DropdownMenu.Item>
 
-			<DropdownMenu.Sub>
-				<DropdownMenu.SubTrigger
-					class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
+				<DropdownMenu.Item
+					class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md"
+					on:click={() => {
+						archiveChatHandler();
+					}}
 				>
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						class="size-4"
+					<ArchiveBox className="size-4" strokeWidth="2" />
+					<div class="flex items-center">{$i18n.t('Archive')}</div>
+				</DropdownMenu.Item>
+
+				<DropdownMenu.Sub>
+					<DropdownMenu.SubTrigger
+						class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
 					>
-						<path
-							stroke-linecap="round"
-							stroke-linejoin="round"
-							d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-						/>
-					</svg>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="size-4"
+						>
+							<path
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+							/>
+						</svg>
 
-					<div class="flex items-center">{$i18n.t('Download')}</div>
-				</DropdownMenu.SubTrigger>
-				<DropdownMenu.SubContent
-					class="w-full rounded-xl px-1 py-1.5 z-50 bg-white dark:bg-gray-850 dark:text-white shadow-lg"
-					transition={flyAndScale}
-					sideOffset={8}
-				>
-					{#if $user?.role === 'admin' || ($user.permissions?.chat?.export ?? true)}
+						<div class="flex items-center">{$i18n.t('Download')}</div>
+					</DropdownMenu.SubTrigger>
+					<DropdownMenu.SubContent
+						class="w-full rounded-xl px-1 py-1.5 z-50 bg-white dark:bg-gray-850 dark:text-white shadow-lg"
+						transition={flyAndScale}
+						sideOffset={8}
+					>
+						{#if $user?.role === 'admin' || ($user.permissions?.chat?.export ?? true)}
+							<DropdownMenu.Item
+								class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
+								on:click={() => {
+									downloadJSONExport();
+								}}
+							>
+								<div class="flex items-center line-clamp-1">{$i18n.t('Export chat (.json)')}</div>
+							</DropdownMenu.Item>
+						{/if}
 						<DropdownMenu.Item
 							class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
 							on:click={() => {
-								downloadJSONExport();
+								downloadTxt();
 							}}
 						>
-							<div class="flex items-center line-clamp-1">{$i18n.t('Export chat (.json)')}</div>
+							<div class="flex items-center line-clamp-1">{$i18n.t('Plain text (.txt)')}</div>
 						</DropdownMenu.Item>
-					{/if}
-					<DropdownMenu.Item
-						class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
-						on:click={() => {
-							downloadTxt();
-						}}
-					>
-						<div class="flex items-center line-clamp-1">{$i18n.t('Plain text (.txt)')}</div>
-					</DropdownMenu.Item>
 
-					<DropdownMenu.Item
-						class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
-						on:click={() => {
-							downloadPdf();
-						}}
-					>
-						<div class="flex items-center line-clamp-1">{$i18n.t('PDF document (.pdf)')}</div>
-					</DropdownMenu.Item>
-				</DropdownMenu.SubContent>
-			</DropdownMenu.Sub>
+						<DropdownMenu.Item
+							class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
+							on:click={() => {
+								downloadPdf();
+							}}
+						>
+							<div class="flex items-center line-clamp-1">{$i18n.t('PDF document (.pdf)')}</div>
+						</DropdownMenu.Item>
+					</DropdownMenu.SubContent>
+				</DropdownMenu.Sub>
 
-			<DropdownMenu.Item
-				class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
-				id="chat-copy-button"
-				on:click={async () => {
-					const res = await copyToClipboard(await getChatAsText()).catch((e) => {
-						console.error(e);
-					});
+				<DropdownMenu.Item
+					class="flex gap-2 items-center px-3 py-2 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md select-none w-full"
+					id="chat-copy-button"
+					on:click={async () => {
+						const res = await copyToClipboard(await getChatAsText()).catch((e) => {
+							console.error(e);
+						});
 
-					if (res) {
-						toast.success($i18n.t('Copied to clipboard'));
-					}
-				}}
-			>
-				<Clipboard className=" size-4" strokeWidth="1.5" />
-				<div class="flex items-center">{$i18n.t('Copy')}</div>
-			</DropdownMenu.Item>
+						if (res) {
+							toast.success($i18n.t('Copied to clipboard'));
+						}
+					}}
+				>
+					<Clipboard className=" size-4" strokeWidth="1.5" />
+					<div class="flex items-center">{$i18n.t('Copy')}</div>
+				</DropdownMenu.Item>
+			{/if}
 
 			{#if !$temporaryChatEnabled}
 				<hr class="border-gray-100 dark:border-gray-850 my-0.5" />
