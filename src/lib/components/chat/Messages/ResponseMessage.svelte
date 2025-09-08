@@ -1179,7 +1179,7 @@
 									</Tooltip>
 								{/if}
 
-								{#if message.usage}
+								{#if message.usage && $user?.role === 'admin'}
 									<Tooltip
 										content={message.usage
 											? `<pre>${sanitizeResponseContent(
