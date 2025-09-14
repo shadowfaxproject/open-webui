@@ -19,7 +19,7 @@
 	import { getBanners } from '$lib/apis/configs';
 	import { getUserSettings } from '$lib/apis/users';
 
-	import { WEBUI_VERSION } from '$lib/constants';
+	import { TRIAL_USER_EMAIL, WEBUI_VERSION } from '$lib/constants';
 	import { compareVersion } from '$lib/utils';
 
 	import {
@@ -348,7 +348,9 @@
 					</div>
 				{/if}
 
-				<Sidebar />
+				{#if ($user?.email) !== TRIAL_USER_EMAIL}
+					<Sidebar />
+				{/if}
 
 				{#if loaded}
 					<slot />
