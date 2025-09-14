@@ -41,7 +41,7 @@
 		importChat
 	} from '$lib/apis/chats';
 	import { createNewFolder, getFolders, updateFolderParentIdById } from '$lib/apis/folders';
-	import { WEBUI_BASE_URL } from '$lib/constants';
+	import { TRIAL_USER_EMAIL, WEBUI_BASE_URL } from '$lib/constants';
 
 	import ArchivedChatsModal from './ArchivedChatsModal.svelte';
 	import UserMenu from './Sidebar/UserMenu.svelte';
@@ -511,7 +511,7 @@
 	}}
 />
 
-{#if !$mobile && !$showSidebar}
+{#if !$mobile && !$showSidebar && $user?.email !== TRIAL_USER_EMAIL}
 	<div
 		class=" py-2 px-1.5 flex flex-col justify-between text-black dark:text-white h-full border-e border-gray-50 dark:border-gray-850 z-10"
 		id="sidebar"
