@@ -111,8 +111,10 @@ for source in log_sources:
 log.setLevel(SRC_LOG_LEVELS["CONFIG"])
 
 WEBUI_NAME = os.environ.get("WEBUI_NAME", "Open WebUI")
+WEBUI_TAGLINE = os.environ.get("WEBUI_TAGLINE", "The Open Source WebUI for LLMs")
+WEBUI_SOCKET_URL = os.environ.get("WEBUI_SOCKET_URL", "")
 
-WEBUI_FAVICON_URL = "https://openwebui.com/favicon.png"
+WEBUI_FAVICON_URL = "/static/favicon.png"
 
 TRUSTED_SIGNATURE_KEY = os.environ.get("TRUSTED_SIGNATURE_KEY", "")
 

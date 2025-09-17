@@ -52,6 +52,8 @@
 	import { fade } from 'svelte/transition';
 	import { flyAndScale } from '$lib/utils/transitions';
 	import RegenerateMenu from './ResponseMessage/RegenerateMenu.svelte';
+	import OptionGroup from '$lib/components/common/OptionGroup.svelte';
+	import ProductGrid from '$lib/components/common/ProductGrid.svelte';
 
 	interface MessageType {
 		id: string;
@@ -162,6 +164,67 @@
 	let generatingImage = false;
 
 	let showRateComment = false;
+
+	const parseOptionsFromMessage = (message: string): { title: string; description: string, state: string}[] => {
+		const parsedMessage = JSON.parse(message);
+		const parsedOptions = parsedMessage.options;
+		return parsedOptions.map((option: { title: string; description: string, state: string}) => ({
+			title: option.title ?? '',
+			description: option.description ?? '',
+			state: option.state
+		}));
+	};
+
+	const parseContextFromMessage = (message: string): {header_message: string, footer_message: string} => {
+		const parsedMessage = JSON.parse(message);
+		const header_message = parsedMessage.header_message;
+		const footer_message = parsedMessage.footer_message;
+		return {header_message: header_message, footer_message: footer_message};
+	};
+
+	const parseGiftIdeaIdFromMessage = (message: string): {id: string} => {
+		const parsedMessage = JSON.parse(message);
+		const product_list = parsedMessage.product_list;
+		return { id: (product_list.match(/GiftIdea Id ([a-z0-9]+)/) || [])[1] || '' };
+	};
+
+	const updateMessage = async (message: MessageType, title: string) => {
+		const parsedMessage = JSON.parse(message.content);
+		// find option that has the same title as the one passed in and update its state = selected. For everything else, set state = disabled
+		const updatedOptions = parsedMessage.options.map((option: { title: string; description: string, state: string }) => {
+			if (option.title === title) {
+				return { ...option, state: 'selected' };
+			} else if (option.state === 'selected') {
+				return { ...option, state: 'selected' };
+			} else {
+				return { ...option, state: 'unselected' };
+			}
+		});
+
+		let header_message, footer_message, product_list;
+		if (parsedMessage.header_message) {
+			header_message = parsedMessage.header_message;
+		} else {
+			header_message = '';
+		}
+
+		if (parsedMessage.footer_message) {
+			footer_message = parsedMessage.footer_message;
+		} else {
+			footer_message = '';
+		}
+
+		if (parsedMessage.product_list) {
+			product_list = parsedMessage.product_list;
+			const updatedContent = JSON.stringify({header_message: header_message, footer_message: footer_message, options: updatedOptions, product_list: product_list}, null, 2);
+			saveMessage(message.id, {...message, content: updatedContent});
+		} else {
+			const updatedContent = JSON.stringify({header_message: header_message, footer_message: footer_message, options: updatedOptions}, null, 2);
+			saveMessage(message.id, {...message, content: updatedContent});
+		}
+		// Save updated message-content as JSON-string in history.
+		updateChat()
+	};
 
 	const copyToClipboard = async (text) => {
 		text = removeAllDetails(text);
@@ -800,7 +863,7 @@
 							<div class="w-full flex flex-col relative" id="response-content-container">
 								{#if message.content === '' && !message.error && (message?.statusHistory ?? [...(message?.status ? [message?.status] : [])]).length === 0}
 									<Skeleton />
-								{:else if message.content && message.error !== true}
+								{:else if message.content && message.error !== true && !message.content.includes("\"options\":") && !message.content.includes("\"product_list\":")}
 									<!-- always show message contents even if there's an error -->
 									<!-- unless message.error === true which is legacy error handling, where the error message is stored in message.content -->
 									<ContentRenderer
@@ -840,6 +903,23 @@
 											].content.replace(raw, raw.replace(oldContent, newContent));
 
 											updateChat();
+										}}
+									/>
+								{:else if message?.content && message.content.includes("\"product_list\":")}
+									<!-- Render Product List -->
+									<ProductGrid chat_id={chatId} gift_idea_id={parseGiftIdeaIdFromMessage(message.content)}
+																				on:click={(e) => {
+																						console.log(e);
+																				}}
+									/>
+									<br>
+								{/if}
+								{#if message?.content && message.content.includes("\"options\":")}
+									<!-- Render Options -->
+									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
+										on:click={(e) => {const selectedOption = e.detail;
+										updateMessage(message, selectedOption.title);
+										submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
 										}}
 									/>
 								{/if}
