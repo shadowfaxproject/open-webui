@@ -2299,6 +2299,7 @@
 										{mergeResponses}
 										{chatActionHandler}
 										{addMessages}
+										{initNewChat}
 										topPadding={true}
 										bottomPadding={files.length > 0}
 										{onSelect}

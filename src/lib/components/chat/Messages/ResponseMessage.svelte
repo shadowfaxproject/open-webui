@@ -42,7 +42,7 @@
 
 	import DeleteConfirmDialog from '$lib/components/common/ConfirmDialog.svelte';
 
-	import Error from './Error.svelte';
+	import ErrorMB from './ErrorMB.svelte';
 	import Citations from './Citations.svelte';
 	import CodeExecutions from './CodeExecutions.svelte';
 	import ContentRenderer from './ContentRenderer.svelte';
@@ -140,6 +140,7 @@
 
 	export let isLastMessage = true;
 	export let readOnly = false;
+	export let initNewChat: Function;
 	export let editCodeBlock = true;
 	export let topPadding = false;
 
@@ -925,7 +926,7 @@
 								{/if}
 
 								{#if message?.error}
-									<Error content={message?.error?.content ?? message.content} />
+									<ErrorMB {initNewChat} content={message?.content} />
 								{/if}
 
 								{#if (message?.sources || message?.citations) && (model?.info?.meta?.capabilities?.citations ?? true)}

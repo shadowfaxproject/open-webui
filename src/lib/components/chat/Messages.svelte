@@ -47,6 +47,7 @@
 	export let showMessage: Function = () => {};
 	export let submitMessage: Function = () => {};
 	export let addMessages: Function = () => {};
+	export let initNewChat: Function = () => {};
 
 	export let readOnly = false;
 	export let editCodeBlock = true;
@@ -447,6 +448,7 @@
 								{mergeResponses}
 								{addMessages}
 								{triggerScroll}
+								{initNewChat}
 								{readOnly}
 								{editCodeBlock}
 								{topPadding}

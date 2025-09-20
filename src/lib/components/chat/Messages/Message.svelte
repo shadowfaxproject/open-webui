@@ -40,6 +40,7 @@
 
 	export let addMessages;
 	export let triggerScroll;
+	export let initNewChat;
 	export let readOnly = false;
 	export let editCodeBlock = true;
 	export let topPadding = false;
@@ -95,6 +96,7 @@
 				{regenerateResponse}
 				{addMessages}
 				{readOnly}
+				{initNewChat}
 				{editCodeBlock}
 				{topPadding}
 			/>
