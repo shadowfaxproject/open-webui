@@ -42,23 +42,6 @@
 	import { getFileContentById } from '$lib/apis/files';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { Toaster, toast } from 'svelte-sonner';
-
-	import { executeToolServer, getBackendConfig } from '$lib/apis';
-	import { getSessionUser, userSignOut } from '$lib/apis/auths';
-
-	import '../tailwind.css';
-	import '../app.css';
-
-	import 'tippy.js/dist/tippy.css';
-
-	import { TRIAL_USER_EMAIL, WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
-	import i18n, { initI18n, getLanguages, changeLanguage } from '$lib/i18n';
-	import { bestMatchingLanguage } from '$lib/utils';
-	import { getAllTags, getChatList } from '$lib/apis/chats';
-	import NotificationToast from '$lib/components/NotificationToast.svelte';
-	import AppSidebar from '$lib/components/app/AppSidebar.svelte';
-	import { chatCompletion } from '$lib/apis/openai';
 
 	import { beforeNavigate } from '$app/navigation';
 	import { updated } from '$app/state';
@@ -80,7 +63,7 @@
 		removeTerminalConnection
 	} from '$lib/utils/connections';
 
-	import { WEBUI_API_BASE_URL, WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
+	import { TRIAL_USER_EMAIL, WEBUI_API_BASE_URL, WEBUI_BASE_URL, WEBUI_HOSTNAME } from '$lib/constants';
 	import { bestMatchingLanguage, displayFileHandler, getUserTimezone } from '$lib/utils';
 	import { setTextScale } from '$lib/utils/text-scale';
 

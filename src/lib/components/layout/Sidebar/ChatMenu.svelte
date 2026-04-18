@@ -263,31 +263,10 @@
 	}
 </script>
 
-{#if chat && showFullMessages}
-	<div class="hidden w-full h-full flex-col">
-		<div id="full-messages-container">
-			<Messages
-				className="h-full flex pt-4 pb-8 w-full"
-				chatId={`chat-preview-${chat?.id ?? ''}`}
-				user={$user}
-				readOnly={true}
-				history={chat.chat.history}
-				messages={chat.chat.messages}
-				autoScroll={true}
-				sendMessage={() => {}}
-				continueResponse={() => {}}
-				regenerateResponse={() => {}}
-				messagesCount={null}
-				editCodeBlock={false}
-			/>
-		</div>
-	</div>
-{/if}
-
 <Dropdown
 	bind:show
-	onOpenChange={(state) => {
-		if (state === false) {
+	on:change={(e) => {
+		if (e.detail === false) {
 			onClose();
 		}
 	}}
@@ -297,149 +276,57 @@
 	</Tooltip>
 
 	<div slot="content">
-		<div
-			class="select-none min-w-[200px] rounded-2xl px-1 py-1 border border-gray-100 dark:border-gray-800 z-50 bg-white dark:bg-gray-850 dark:text-white shadow-lg transition"
+		<DropdownMenu.Content
+			class="w-full max-w-[200px] rounded-xl px-1 py-1.5 z-50 bg-white dark:bg-gray-850 dark:text-white shadow-lg"
+			sideOffset={-2}
+			side="bottom"
+			align="start"
+			transition={flyAndScale}
 		>
-			{#if $user?.role === 'admin' || ($user.permissions?.chat?.share ?? true)}
-				<button
-					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl w-full"
-					on:click={() => {
-						shareHandler();
-					}}
-				>
-					<Share strokeWidth="1.5" />
-					<div class="flex items-center">{$i18n.t('Share')}</div>
-				</button>
-			{/if}
-
-			<DropdownSub
-				contentClass="select-none rounded-2xl p-1 z-50 bg-white dark:bg-gray-850 dark:text-white shadow-lg border border-gray-100 dark:border-gray-800"
-			>
-				<button
-					slot="trigger"
-					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl w-full"
-				>
-					<Download strokeWidth="1.5" />
-					<div class="flex items-center">{$i18n.t('Download')}</div>
-				</button>
-
-				{#if $user?.role === 'admin' || ($user.permissions?.chat?.export ?? true)}
-					<button
-						draggable="false"
-						class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl w-full"
-						on:click={() => {
-							downloadJSONExport();
-						}}
-					>
-						<div class="flex items-center line-clamp-1">{$i18n.t('Export chat (.json)')}</div>
-					</button>
-				{/if}
-
-				<button
-					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl w-full"
-					on:click={() => {
-						downloadTxt();
-					}}
-				>
-					<div class="flex items-center line-clamp-1">{$i18n.t('Plain text (.txt)')}</div>
-				</button>
-
-				<button
-					draggable="false"
-					class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
-					on:click={() => {
-						downloadPdf();
-					}}
-				>
-					<div class="flex items-center line-clamp-1">{$i18n.t('PDF document (.pdf)')}</div>
-				</button>
-			</DropdownSub>
-
-			<button
-				draggable="false"
-				class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl w-full"
-				on:click={() => {
-					renameHandler();
-				}}
-			>
-				<Pencil strokeWidth="1.5" />
-				<div class="flex items-center">{$i18n.t('Rename')}</div>
-			</button>
-
-			<hr class="border-gray-50/30 dark:border-gray-800/30 my-1" />
-
-			<button
-				draggable="false"
-				class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl w-full"
+			<DropdownMenu.Item
+				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md"
 				on:click={() => {
 					pinHandler();
 				}}
 			>
 				{#if pinned}
-					<BookmarkSlash strokeWidth="1.5" />
+					<BookmarkSlash strokeWidth="2" />
 					<div class="flex items-center">{$i18n.t('Unpin')}</div>
 				{:else}
-					<Bookmark strokeWidth="1.5" />
+					<Bookmark strokeWidth="2" />
 					<div class="flex items-center">{$i18n.t('Pin')}</div>
 				{/if}
-			</button>
+			</DropdownMenu.Item>
 
-			<button
-				draggable="false"
-				class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl w-full"
+			<DropdownMenu.Item
+				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md"
 				on:click={() => {
-					show = false;
+					renameHandler();
+				}}
+			>
+				<Pencil strokeWidth="2" />
+				<div class="flex items-center">{$i18n.t('Rename')}</div>
+			</DropdownMenu.Item>
+
+			<DropdownMenu.Item
+				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md"
+				on:click={() => {
 					cloneChatHandler();
 				}}
 			>
-				<DocumentDuplicate strokeWidth="1.5" />
+				<DocumentDuplicate strokeWidth="2" />
 				<div class="flex items-center">{$i18n.t('Clone')}</div>
-			</button>
+			</DropdownMenu.Item>
 
-			{#if chatId && $folders.length > 0}
-				<DropdownSub
-					contentClass="select-none rounded-2xl p-1 z-50 bg-white dark:bg-gray-850 dark:text-white border border-gray-100 dark:border-gray-800 shadow-lg max-h-52 overflow-y-auto scrollbar-hidden"
-				>
-					<button
-						slot="trigger"
-						draggable="false"
-						class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl select-none w-full"
-					>
-						<Folder />
-						<div class="flex items-center">{$i18n.t('Move')}</div>
-					</button>
-
-					{#each $folders.sort((a, b) => b.updated_at - a.updated_at) as folder}
-						<button
-							draggable="false"
-							class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl overflow-hidden w-full"
-							on:click={() => {
-								moveChatHandler(chatId, folder.id);
-							}}
-						>
-							<div class="shrink-0">
-								<Folder />
-							</div>
-
-							<div class="truncate">{folder?.name ?? 'Folder'}</div>
-						</button>
-					{/each}
-				</DropdownSub>
-			{/if}
-
-			<button
-				draggable="false"
-				class="flex gap-2 items-center px-3 py-1.5 text-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl w-full"
+			<DropdownMenu.Item
+				class="flex gap-2 items-center px-3 py-1.5 text-sm  cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md"
 				on:click={() => {
 					archiveChatHandler();
 				}}
 			>
-				<ArchiveBox strokeWidth="1.5" />
+				<ArchiveBox strokeWidth="2" />
 				<div class="flex items-center">{$i18n.t('Archive')}</div>
-			</button>
+			</DropdownMenu.Item>
 
 			{#if $user?.role === 'admin' || ($user.permissions?.chat?.share ?? true)}
 				<DropdownMenu.Item
@@ -505,7 +392,7 @@
 					deleteHandler();
 				}}
 			>
-				<GarbageBin strokeWidth="1.5" />
+				<GarbageBin strokeWidth="2" />
 				<div class="flex items-center">{$i18n.t('Delete')}</div>
 			</DropdownMenu.Item>
 			{/if}

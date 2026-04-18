@@ -319,7 +319,11 @@
 		// Do not show changelog for any user
 		showChangelog.set(false);
 
-			if ($user?.role !== 'admin' && $user?.permissions?.chat?.temporary_enforced) {
+		if ($user?.role === 'admin' || ($user?.permissions?.chat?.temporary ?? true)) {
+			if ($page.url.searchParams.get('temporary-chat') === 'true') {
+				temporaryChatEnabled.set(true);
+			}
+			if ($user?.permissions?.chat?.temporary_enforced) {
 				temporaryChatEnabled.set(true);
 			}
 		}

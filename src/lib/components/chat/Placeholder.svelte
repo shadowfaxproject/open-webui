@@ -72,6 +72,25 @@
 	}
 
 	$: models = selectedModels.map((id) => $_models.find((m) => m.id === id));
+
+	const selectSuggestionPrompt = async (p) => {
+		let text = p;
+		if (p.includes('{{CLIPBOARD}}')) {
+			const clipboardText = await navigator.clipboard.readText().catch((err) => {
+				toast.error($i18n.t('Failed to read clipboard contents'));
+				return '{{CLIPBOARD}}';
+			});
+			text = p.replaceAll('{{CLIPBOARD}}', clipboardText);
+		}
+		prompt = text;
+		await tick();
+		const chatInputElement = document.getElementById('chat-input');
+		if (chatInputElement) {
+			chatInputElement.focus();
+			chatInputElement.dispatchEvent(new Event('input'));
+		}
+		await tick();
+	};
 </script>
 
 <div class="m-auto w-full max-w-6xl px-2 @2xl:px-20 translate-y-6 py-24 text-center">
@@ -259,18 +278,5 @@
 				}}
 			/>
 		</div>
-	{:else}
-		<div class="mx-auto max-w-2xl font-primary mt-2" in:fade={{ duration: 200, delay: 200 }}>
-			<div class="mx-5">
-				<Suggestions
-					suggestionPrompts={atSelectedModel?.info?.meta?.suggestion_prompts ??
-						models[selectedModelIdx]?.info?.meta?.suggestion_prompts ??
-						$config?.default_prompt_suggestions ??
-						[]}
-					inputValue={prompt}
-					{onSelect}
-				/>
-			</div>
-		</div>
-	{/if}
+	</div>
 </div>

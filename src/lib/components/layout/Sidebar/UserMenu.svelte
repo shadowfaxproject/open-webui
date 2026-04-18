@@ -670,7 +670,6 @@
 							</div>
 						</div>
 					</Tooltip>
-				{/if}
 			{/if}
 		</div>
 	</div>
