@@ -925,117 +925,6 @@
 									</div>
 								</div>
 							</div>
-						{:else}
-							<div class="w-full flex flex-col relative" id="response-content-container">
-								{#if message.content === '' && !message.error && (message?.statusHistory ?? [...(message?.status ? [message?.status] : [])]).length === 0}
-									<Skeleton />
-								{:else if message.content && message.error !== true && !message.content.includes("\"options\":") && !message.content.includes("\"product_list\":")}
-									<!-- always show message contents even if there's an error -->
-									<!-- unless message.error === true which is legacy error handling, where the error message is stored in message.content -->
-									<ContentRenderer
-										id={message.id}
-										{history}
-										content={message.content}
-										sources={message.sources}
-										floatingButtons={message?.done && !readOnly}
-										save={!readOnly}
-										preview={!readOnly}
-										{model}
-										onTaskClick={async (e) => {
-											console.log(e);
-										}}
-										onSourceClick={async (id, idx) => {
-											console.log(id, idx);
-											let sourceButton = document.getElementById(`source-${message.id}-${idx}`);
-											const sourcesCollapsible = document.getElementById(
-												`collapsible-${message.id}`
-											);
-
-											if (sourceButton) {
-												sourceButton.click();
-											} else if (sourcesCollapsible) {
-												// Open sources collapsible so we can click the source button
-												sourcesCollapsible
-													.querySelector('div:first-child')
-													.dispatchEvent(new PointerEvent('pointerup', {}));
-
-												// Wait for next frame to ensure DOM updates
-												await new Promise((resolve) => {
-													requestAnimationFrame(() => {
-														requestAnimationFrame(resolve);
-													});
-												});
-
-												// Try clicking the source button again
-												sourceButton = document.getElementById(`source-${message.id}-${idx}`);
-												sourceButton && sourceButton.click();
-											}
-										}}
-										onAddMessages={({ modelId, parentId, messages }) => {
-											addMessages({ modelId, parentId, messages });
-										}}
-										onSave={({ raw, oldContent, newContent }) => {
-											history.messages[message.id].content = history.messages[
-												message.id
-											].content.replace(raw, raw.replace(oldContent, newContent));
-
-											updateChat();
-										}}
-										on:select={(e) => {
-											const { type, content } = e.detail;
-
-											if (type === 'explain') {
-												submitMessage(
-													message.id,
-													`Explain this section to me in more detail\n\n\`\`\`\n${content}\n\`\`\``
-												);
-											} else if (type === 'ask') {
-												const input = e.detail?.input ?? '';
-												submitMessage(message.id, `\`\`\`\n${content}\n\`\`\`\n${input}`);
-											}
-										}}
-									/>
-								{:else if message.content && message.error !== true && message.content.includes("\"product_list\":")}
-									<!-- always show message contents even if there's an error -->
-									<!-- unless message.error === true which is legacy error handling, where the error message is stored in message.content -->
-									<!-- Render Product List -->
-									<ProductGrid products={parseProductListFromMessage(message.content)}
-                                        on:click={(e) => {
-                                            console.log(e);
-                                        }}
-									/>
-									<br>
-									{#if message.content.includes("\"options\":")}
-										<!-- Render Options -->
-										<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
-											on:click={(e) => {const selectedOption = e.detail;
-											updateMessage(message, selectedOption.title);
-											submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
-											}}
-										/>
-									{/if}
-								{:else if message.content && message.error !== true && message.content.includes("\"options\":")}
-									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
-										on:click={(e) => {
-											const selectedOption = e.detail;
-											updateMessage(message, selectedOption.title);
-											submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
-										}}
-									/>
-								{/if}
-
-								{#if message?.error}
-									<ErrorMB {initNewChat} content={message?.content} />
-								{/if}
-
-								{#if (message?.sources || message?.citations) && (model?.info?.meta?.capabilities?.citations ?? true)}
-									<Citations id={message?.id} sources={message?.sources ?? message?.citations} />
-								{/if}
-
-								{#if message.code_executions}
-									<CodeExecutions codeExecutions={message.code_executions} />
-								{/if}
-							</div>
 						{/if}
 
 						<div
@@ -1045,7 +934,7 @@
 						>
 							{#if message.content === '' && !message.done && !message.error && !hasVisibleStatus}
 								<Skeleton />
-							{:else if message.content && message.error !== true}
+							{:else if message.content && message.error !== true && !message.content.includes("\"product_list\":") && !message.content.includes("\"options\":")}
 								<!-- always show message contents even if there's an error -->
 								<!-- unless message.error === true which is legacy error handling, where the error message is stored in message.content -->
 								<ContentRenderer
@@ -1084,10 +973,32 @@
 										updateChat();
 									}}
 								/>
+							{:else if message.content && message.error !== true && message.content.includes("\"product_list\":")}
+								<ProductGrid products={parseProductListFromMessage(message.content)}
+									on:click={(e) => { console.log(e); }}
+								/>
+								<br>
+								{#if message.content.includes("\"options\":")}
+									<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
+										on:click={(e) => {
+											const selectedOption = e.detail;
+											updateMessage(message, selectedOption.title);
+											submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
+										}}
+									/>
+								{/if}
+							{:else if message.content && message.error !== true && message.content.includes("\"options\":")}
+								<OptionGroup options={parseOptionsFromMessage(message.content)} option_context={parseContextFromMessage(message.content)}
+									on:click={(e) => {
+										const selectedOption = e.detail;
+										updateMessage(message, selectedOption.title);
+										submitMessage(message.id, `${selectedOption.title}: ${selectedOption.description}`);
+									}}
+								/>
 							{/if}
 
 							{#if message?.error}
-								<Error content={message?.error?.content ?? message.content} />
+								<ErrorMB {initNewChat} content={message?.error?.content ?? message.content} />
 							{/if}
 
 							{#if (message?.sources || message?.citations) && (model?.info?.meta?.capabilities?.citations ?? true)}
