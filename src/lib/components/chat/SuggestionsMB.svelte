@@ -51,19 +51,12 @@
 			// If inputValue is empty, show all prompts
 			filteredPrompts = sortedPrompts.filter((prompt) => prompt.pin === true); // Only pinned prompts
 		} else if (inputValue.length > 0) {
-			const combined = [
+			const newFilteredPrompts = dedup([
 				...(inputValue.trim() && fuse
 					? fuse.search(inputValue.trim()).map((result) => result.item)
 					: sortedPrompts.filter((prompt) => !prompt.pin)),
 				...sortedPrompts.filter((prompt) => prompt.pin === true)
-			];
-			const seen = new Set();
-			const newFilteredPrompts = combined.filter((p) => {
-				const key = p.id ?? p.content;
-				if (seen.has(key)) return false;
-				seen.add(key);
-				return true;
-			});
+			]);
 
 			// Compare with the oldFilteredPrompts
 			// If there's a difference, update array + version
@@ -73,8 +66,18 @@
 		}
 	};
 
+	const dedup = (arr) => {
+		const seen = new Set();
+		return arr.filter((p) => {
+			const key = p.id ?? p.content;
+			if (seen.has(key)) return false;
+			seen.add(key);
+			return true;
+		});
+	};
+
 	$: if (suggestionPrompts) {
-		sortedPrompts = [...(suggestionPrompts ?? [])].sort(() => Math.random() - 0.5);
+		sortedPrompts = dedup([...(suggestionPrompts ?? [])].sort(() => Math.random() - 0.5));
 		getFilteredPrompts(inputValue);
 	}
 </script>
