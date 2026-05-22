@@ -1034,7 +1034,7 @@
 		if (backendConfig) {
 			// Save Backend Status to Store
 			await config.set(backendConfig);
-			await WEBUI_NAME.set(backendConfig.name);
+			// Keep APP_NAME ('Magicbox') instead of overwriting with backend name
 			await WEBUI_TAGLINE.set(backendConfig.tagline);
 			await WEBUI_SOCKET_URL.set(backendConfig.webui_socket_url);
 
