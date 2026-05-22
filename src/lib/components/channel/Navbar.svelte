@@ -12,7 +12,7 @@
 	import UserMenu from '$lib/components/layout/Sidebar/UserMenu.svelte';
 	import PencilSquare from '../icons/PencilSquare.svelte';
 	import Tooltip from '../common/Tooltip.svelte';
-	import Sidebar from '../icons/Sidebar.svelte';
+	import ChevronRight from '../icons/ChevronRight.svelte';
 	import Hashtag from '../icons/Hashtag.svelte';
 	import Lock from '../icons/Lock.svelte';
 	import UserAlt from '../icons/UserAlt.svelte';
@@ -61,30 +61,6 @@
 
 	<div class=" flex max-w-full w-full mx-auto px-1 pt-0.5 bg-transparent">
 		<div class="flex items-center w-full max-w-full">
-			{#if $mobile}
-				<div
-					class="{$showSidebar
-						? 'md:hidden'
-						: ''} mr-1.5 mt-0.5 self-start flex flex-none items-center text-gray-600 dark:text-gray-400"
-				>
-					<Tooltip
-						content={$showSidebar ? $i18n.t('Close Sidebar') : $i18n.t('Open Sidebar')}
-						interactive={true}
-					>
-						<button
-							id="sidebar-toggle-button"
-							class=" cursor-pointer flex rounded-lg hover:bg-gray-100 dark:hover:bg-gray-850 transition cursor-"
-							on:click={() => {
-								showSidebar.set(!$showSidebar);
-							}}
-						>
-							<div class=" self-center p-1.5">
-								<Sidebar />
-							</div>
-						</button>
-					</Tooltip>
-				</div>
-			{/if}
 
 			<div
 				class="flex-1 overflow-hidden max-w-full py-0.5 flex items-center
