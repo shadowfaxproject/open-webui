@@ -42,6 +42,8 @@
 
 	export let toolServers = [];
 
+	export let messageInput = undefined;
+
 	let models = [];
 
 	const selectSuggestionPrompt = async (p) => {
@@ -54,29 +56,19 @@
 			});
 
 			text = p.replaceAll('{{CLIPBOARD}}', clipboardText);
-
-			console.log('Clipboard text:', clipboardText, text);
 		}
 
-		prompt = text;
-
-		console.log(prompt);
-		await tick();
-
-		const chatInputContainerElement = document.getElementById('chat-input-container');
-		const chatInputElement = document.getElementById('chat-input');
-
-		if (chatInputContainerElement) {
-			chatInputContainerElement.scrollTop = chatInputContainerElement.scrollHeight;
+		if (messageInput) {
+			messageInput.setText(text);
+		} else {
+			prompt = text;
+			await tick();
+			const chatInputElement = document.getElementById('chat-input');
+			if (chatInputElement) {
+				chatInputElement.focus();
+				chatInputElement.dispatchEvent(new Event('input'));
+			}
 		}
-
-		await tick();
-		if (chatInputElement) {
-			chatInputElement.focus();
-			chatInputElement.dispatchEvent(new Event('input'));
-		}
-
-		await tick();
 	};
 
 	let selectedModelIdx = 0;
@@ -190,6 +182,7 @@
 
 			<div class="text-base font-normal @md:max-w-3xl w-full py-3 {atSelectedModel ? 'mt-2' : ''}">
 				<MessageInput
+					bind:this={messageInput}
 					{history}
 					{selectedModels}
 					bind:files
@@ -231,7 +224,7 @@
 				[]}
 			inputValue={prompt}
 			on:select={(e) => {
-				selectSuggestionPrompt(e.detail);
+				selectSuggestionPrompt(e.detail?.content ?? e.detail);
 			}}
 		/>
 	</div>

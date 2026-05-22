@@ -3,6 +3,7 @@
 	import { marked } from 'marked';
 
 	import { onMount, getContext, tick, createEventDispatcher } from 'svelte';
+	import { goto } from '$app/navigation';
 	import { blur, fade } from 'svelte/transition';
 
 	const dispatch = createEventDispatcher();
@@ -212,6 +213,12 @@
 				prompt_suggestions ??
 				[]}
 			inputValue={prompt}
+			on:select={(e) => {
+				const p = e.detail;
+				if (p?.chat_id) {
+					goto(`/c/${p.chat_id}`);
+				}
+			}}
 		/>
 	</div>
 </div>
