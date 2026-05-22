@@ -297,8 +297,8 @@ async def rag_template(template: str, context: str, query: str):
     return template
 
 
-async def title_generation_template(template: str, messages: list[dict], user: Optional[Any] = None) -> str:
-    prompt = get_last_user_message(messages)
+async def title_generation_template(template: str, gift_request_desc: str, user: Optional[Any] = None) -> str:
+    prompt = gift_request_desc
     template = replace_prompt_variable(template, prompt)
     template = replace_messages_variable(template, [])
 

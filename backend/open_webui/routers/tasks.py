@@ -206,7 +206,10 @@ async def generate_title(request: Request, form_data: dict, user=Depends(get_ver
     else:
         template = DEFAULT_TITLE_GENERATION_PROMPT_TEMPLATE
 
-    content = await title_generation_template(template, form_data['messages'], user)
+    gift_request_desc = chat_state.gift_request.describe()
+    logging.debug(f"gift_request_desc: {gift_request_desc}")
+
+    content = await title_generation_template(template, gift_request_desc, user)
 
     max_tokens = models[task_model_id].get('info', {}).get('params', {}).get('max_tokens', 50)
 
