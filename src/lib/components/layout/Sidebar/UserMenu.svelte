@@ -9,6 +9,8 @@
 
 	import {
 		showSettings,
+		activeUserIds,
+		USAGE_POOL,
 		mobile,
 		showSidebar,
 		showShortcuts,
